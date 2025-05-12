@@ -1,0 +1,18 @@
+{% extends 'base1.html' %}
+{% load static %}
+
+{% block content %}
+
+<h1>{{ auction.title }}</h1>
+<p>{{ auction.description }}</p>
+<p>Ends on: {{ auction.end_time }}</p>
+
+<h2>Items in this Auction</h2>
+<ul>
+    {% for item in auction.items.all %}
+        <li>{{ item.name }} - Starting price: {{ item.starting_price }}</li>
+    {% endfor %}
+</ul>
+
+
+{% endblock %}

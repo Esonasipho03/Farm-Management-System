@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<h2>Crop Profile</h2>
+<div class="card">
+    {% if crop.image %}
+        <img src="{{ crop.image.url }}" alt="{{ crop.name }}" class="card-img-top">
+    {% else %}
+        <img src="{% static 'app_name/images/default_crop_image.jpg' %}" alt="Default Image" class="card-img-top">
+    {% endif %}
+
+    <div class="card-body">
+        <h3 class="card-title">Name: {{ crop.name }}</h3>
+        <p class="card-text"><strong>Type:</strong> {{ crop.crop_type }}</p>
+        <p class="card-text"><strong>Variety:</strong> {{ crop.variety }}</p>
+        <p class="card-text"><strong>Season:</strong> {{ crop.season }}</p>
+        <p class="card-text"><strong>Harvest Date:</strong> {{ crop.harvest_date }}</p>
+        <p class="card-text"><strong>Quantity:</strong> {{ crop.quantity }}</p>  <!-- Display quantity -->
+    </div>
+
+    <!-- Flexbox container for the buttons -->
+    <div class="button-group card-footer">
+        <a href="{% url 'crop_edit' crop.pk %}" class="btn btn-primary">Edit</a>
+        <form action="{% url 'crop_delete' crop.pk %}" method="POST" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

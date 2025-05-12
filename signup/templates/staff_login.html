@@ -1,0 +1,159 @@
+<!-- staff_login.html -->
+<div class="login-container">
+    <div class="login-left">
+        <h1>Welcome to GreenFarm</h1>
+        <p>Farm Staff Login</p>
+    </div>
+    <div class="login-right">
+        <h2>Staff Login</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" value="{{ form.username.value|default_if_none:'' }}">
+                {{ form.username.errors }}
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <div class="password-container">
+                    <input type="password" id="password" name="password" value="{{ form.password.value|default_if_none:'' }}">
+                    <button type="button" id="togglePassword" onclick="togglePassword()">👁️</button>
+                </div>
+                {{ form.password.errors }}
+            </div>
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+        <p>Don't have an account? <a href="{% url 'signup' %}">Register here</a></p>
+    </div>
+</div>
+
+<style>
+    /* Overall container styling */
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(135deg, #e0f7e9, #c8e7d8); /* Light gradient background */
+        font-family: 'Arial', sans-serif;
+    }
+
+    /* Left section: GreenFarm branding */
+    .login-left {
+        background-color: #006837;
+        color: white;
+        padding: 40px;
+        width: 45%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        border-radius: 10px 0 0 10px;
+    }
+
+    .login-left h1 {
+        font-size: 42px;
+        margin-bottom: 15px;
+    }
+
+    .login-left p {
+        font-size: 18px;
+    }
+
+    /* Right section: Login form */
+    .login-right {
+        background-color: #ffffff;
+        color: #333;
+        width: 45%;
+        padding: 60px;
+        border-radius: 0 10px 10px 0;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-right h2 {
+        color: #006837;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 28px;
+    }
+
+    .login-right form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .login-right input[type="text"],
+    .login-right input[type="password"] {
+        margin-bottom: 20px;
+        padding: 12px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        transition: border 0.3s ease;
+    }
+
+    .login-right input[type="text"]:focus,
+    .login-right input[type="password"]:focus {
+        border: 1px solid #006837;
+        outline: none;
+    }
+
+    .password-container {
+        display: flex;
+        align-items: center;
+    }
+
+    #togglePassword {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #006837;
+        font-size: 18px;
+        margin-left: 10px;
+    }
+
+    .login-btn {
+        background-color: #28a745;
+        color: white;
+        padding: 12px;
+        font-size: 18px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .login-btn:hover {
+        background-color: #218838;
+    }
+
+    .login-right p {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .login-right a {
+        color: #006837;
+        text-decoration: none;
+    }
+
+    .login-right a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<script>
+    function togglePassword() {
+        const passwordInput = document.getElementById('password');
+        const toggleButton = document.getElementById('togglePassword');
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleButton.textContent = '👁️'; // Change icon to indicate visibility
+        } else {
+            passwordInput.type = 'password';
+            toggleButton.textContent = '👁️'; // Change icon to indicate hidden
+        }
+    }
+</script>

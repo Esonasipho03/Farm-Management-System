@@ -1,0 +1,243 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .report-section {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+        }
+
+        canvas {
+            margin-top: 20px;
+            max-width: 500px; /* Adjusted size of the graphs */
+            max-height: 400px; /* Adjusted size of the graphs */
+        }
+
+        h2, h3 {
+            font-family: 'Roboto', sans-serif;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            cursor: pointer; /* Indicate clickable titles */
+        }
+
+        .details-list {
+            display: none; /* Hide details by default */
+            margin-top: 20px;
+            text-align: left; /* Align list text to the left */
+        }
+
+        .livestock-list {
+            list-style: none; /* Remove default bullet points */
+            padding: 0;
+            margin: 20px auto;
+            max-width: 600px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .livestock-list li {
+            background-color: #f1f3f5;
+            margin: 10px 0;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+
+        .livestock-list li:hover {
+            transform: scale(1.02);
+        }
+
+        .livestock-list li::before {
+            content: '\f058'; /* Font Awesome check-circle icon (use any icon you prefer) */
+            font-family: 'Font Awesome 5 Free'; /* Make sure Font Awesome is loaded */
+            font-weight: 900;
+            margin-right: 15px;
+            color: #28a745;
+        }
+
+        .livestock-list li strong {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .livestock-list li span {
+            color: #6c757d;
+            margin-left: auto; /* Align the quantity to the right */
+        }
+
+        /* For responsiveness */
+        @media (max-width: 768px) {
+            canvas {
+                max-width: 100%; /* Full width on smaller screens */
+            }
+
+            .livestock-list li {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+        }
+
+        /* Style for the purchase report */
+        .purchase-report {
+            margin-top: 40px;
+            width: 80%;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .purchase-report table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .purchase-report th, .purchase-report td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .purchase-report th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+
+        .purchase-report h3 {
+            font-family: 'Roboto', sans-serif;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+
+<h2>Livestock Inventory Report</h2>
+
+<div class="report-section">
+    <h3 onclick="toggleDetails('typeDetails')"><i class="fas fa-paw"></i> By Type:</h3>
+    <canvas id="livestockTypeChart"></canvas>
+    <div class="details-list" id="typeDetails">
+        <h4>By Type (Detailed List):</h4>
+        <ul class="livestock-list">
+            {% for item in livestock_by_type %}
+                <li>{{ item.type }}: <span>{{ item.total }}</span></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div class="report-section">
+    <h3 onclick="toggleDetails('breedDetails')"><i class="fas fa-seedling"></i> By Breed:</h3>
+    <canvas id="livestockBreedChart"></canvas>
+    <div class="details-list" id="breedDetails">
+        <h4>By Breed (Detailed List):</h4>
+        <ul class="livestock-list">
+            {% for item in livestock_by_breed %}
+                <li>{{ item.breed }}: <span>{{ item.total }}</span></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<!-- Add the purchase report under the graphs -->
+<div class="purchase-report">
+    <h3>General Report of All Bought Items</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+                <th>Order ID</th>
+                <th>Purchase Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for purchase in purchases %}
+            <tr>
+                <td>{{ purchase.user.username }}</td>
+                <td>{{ purchase.product.name }}</td>
+                <td>{{ purchase.quantity }}</td>
+                <td>R{{ purchase.total_price }}</td>
+                <td>{{ purchase.order_id }}</td>
+                <td>{{ purchase.purchase_date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function toggleDetails(id) {
+        var detailsList = document.getElementById(id);
+        if (detailsList.style.display === "none" || detailsList.style.display === "") {
+            detailsList.style.display = "block"; // Show details
+        } else {
+            detailsList.style.display = "none"; // Hide details
+        }
+    }
+
+    // Livestock Type Chart
+    var ctxType = document.getElementById('livestockTypeChart').getContext('2d');
+    var livestockTypeChart = new Chart(ctxType, {
+        type: 'bar',
+        data: {
+            labels: [{% for item in livestock_by_type %} "{{ item.type }}", {% endfor %}], // Populate dynamically
+            datasets: [{
+                label: 'Number of Livestock by Type',
+                data: [{% for item in livestock_by_type %} {{ item.total }}, {% endfor %}], // Populate dynamically
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Livestock Breed Chart
+    var ctxBreed = document.getElementById('livestockBreedChart').getContext('2d');
+    var livestockBreedChart = new Chart(ctxBreed, {
+        type: 'bar',
+        data: {
+            labels: [{% for item in livestock_by_breed %} "{{ item.breed }}", {% endfor %}], // Populate dynamically
+            datasets: [{
+                label: 'Number of Livestock by Breed',
+                data: [{% for item in livestock_by_breed %} {{ item.total }}, {% endfor %}], // Populate dynamically
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}

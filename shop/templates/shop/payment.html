@@ -1,0 +1,69 @@
+{% extends 'base1.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <style>
+        .payment-container {
+            max-width: 400px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            width: 100%;
+            background: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <h2>Enter Payment Details</h2>
+        <form id="payment-form">
+            <input type="text" id="card-name" placeholder="Name on Card" required>
+            <input type="number" id="card-number" placeholder="Card Number" required>
+            <input type="number" id="card-expiry" placeholder="Expiry Date (MMYY)" required>
+            <input type="number" id="card-cvc" placeholder="CVC" required>
+            <button type="submit">Submit Payment</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('payment-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Simulating a successful payment
+            const orderId = Math.floor(Math.random() * 100000);  // Random Order ID
+            const productsBought = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+            // Redirect to the success page with order ID and products
+            window.location.href = `/successful_payment/?order_id=${orderId}&products=${encodeURIComponent(JSON.stringify(productsBought))}`;
+        });
+    </script>
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<h2>Farm Crop Profiles</h2>
+
+<form method="GET" action="">
+    <input type="text" name="q" placeholder="Search by name" value="{{ request.GET.q }}">
+    <button type="submit">Search</button>
+</form>
+
+<a href="{% url 'crop_add' %}" class="btn btn-primary">Add New Crop</a>
+
+<div class="profile-list">
+    {% for crop in crops %}
+    <div class="profile-item">
+        <div class="profile-image">
+            {% if crop.image %}
+                <img src="{{ crop.image.url }}" alt="{{ crop.name }}">
+            {% else %}
+                <img src="{% static 'default-image.jpg' %}" alt="Default Image">
+            {% endif %}
+        </div>
+        <div class="profile-details">
+            <h3>{{ crop.name }}</h3>
+            <p>Type: {{ crop.crop_type }}</p>
+            <p class="card-text"><strong>Quantity:</strong> {{ crop.quantity }}</p> 
+            
+            
+            <a href="{% url 'crop_detail' crop.pk %}" class="btn btn-secondary">View Details</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

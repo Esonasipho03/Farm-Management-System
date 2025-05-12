@@ -1,0 +1,34 @@
+
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<h2>Livestock Profile</h2>
+<div class="card">
+    {% if live.image %}
+        <img src="{{ live.image.url }}" alt="{{ live.name }}" class="card-img-top">
+    {% else %}
+        <img src="{% static 'app/images/default_crop_image.jpg' %}" alt="Default Image" class="card-img-top">
+    {% endif %}
+
+    <div class="card-body">
+        <h3 class="card-title">Name: {{ live.name }}</h3>
+        <p class="card-text"><strong>Type:</strong> {{ live.type }}</p>
+        <p class="card-text"><strong>Breed:</strong> {{ live.breed }}</p>
+        <p class="card-text"><strong>Age:</strong> {{ live.age }}</p>
+        <p class="card-text"><strong>Weight:</strong> {{ live.weight }}</p>
+        <p class="card-text"><strong>Milk Production (liters):</strong> {{ live.milkproduction }}</p>
+        <p class="card-text"><strong>Pregnant:</strong> {{ live.pregnant }}</p>
+    </div>
+
+    <!-- Flexbox container for the buttons -->
+    <div class="button-group card-footer">
+        <a href="{% url 'live_edit' live.pk %}" class="btn btn-primary">Edit</a>
+        <form action="{% url 'live_delete' live.pk %}" method="POST" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,193 @@
+{% extends 'base1.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            margin: auto;
+            overflow: hidden;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            justify-items: center;
+        }
+        .product {
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            text-align: center;
+            width: 100%;
+        }
+        .product img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .product h2 {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+        .product p {
+            font-size: 1em;
+            color: #333;
+        }
+        .product button {
+            background-color: #2E7D32;
+            color: #fff;
+            border: none;
+            padding: 10px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .product button:hover {
+            background: #218838;
+        }
+        .alert-message {
+            display: none; /* Initially hidden */
+            background-color: #d1ecf1; /* Light blue background */
+            color: #0c5460; /* Dark blue text */
+            border: 1px solid #bee5eb; /* Border color */
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 1.25em; /* Larger font size */
+            font-weight: bold; /* Bold text */
+            text-align: center; /* Center the text */
+        }
+
+        form {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px;
+        }
+        
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+        
+        input[type="text"]:focus {
+            border-color: #007bff;
+        }
+        
+        button[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #2E7D32;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        
+    </style>
+    
+</head>
+<body>
+    <form method="GET" action="">
+        <input type="text" name="q" placeholder="Search by name" value="{{ request.GET.q }}">
+        <button type="submit">Search</button>
+    </form>
+    <div class="container">
+        <!-- Add this div where you want the message to appear -->
+        <div id="cart-message" style="display:none;" class="alert-message">
+            <strong>Product added to cart successfully!</strong>
+        </div>
+    
+        <h1>Our Products</h1>
+        <div class="products">
+            {% for product in products %}
+            <div class="product">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                <h2>{{ product.name }}</h2>
+                <p>Price: R{{ product.price }}</p>
+                <form method="POST" action="{% url 'add_to_cart' product.id %}" class="add-to-cart-form">
+                    {% csrf_token %}
+                    <button type="button" class="add-to-cart" data-product-id="{{ product.id }}">Add to Cart</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Get all add-to-cart buttons
+            const buttons = document.querySelectorAll('.add-to-cart');
+
+            buttons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const productId = this.getAttribute('data-product-id');
+                    const form = this.closest('.add-to-cart-form'); // Get the closest form
+
+                    // Prevent the default form submission
+                    event.preventDefault();
+
+                    // Perform AJAX request to add the item to the cart
+                    fetch(`/add-to-cart/${productId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'  // Ensure CSRF token is included
+                        },
+                        body: JSON.stringify({})
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            // Show success message
+                            const messageDiv = document.getElementById('cart-message');
+                            messageDiv.innerHTML = 'Product added to cart successfully!';
+                            messageDiv.style.display = 'block'; // Show the message
+
+                            // Hide the message after 3 seconds
+                            setTimeout(() => {
+                                messageDiv.style.display = 'none';
+                            }, 3000);
+                        } else {
+                            console.error('Error adding to cart');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+{% endblock %}

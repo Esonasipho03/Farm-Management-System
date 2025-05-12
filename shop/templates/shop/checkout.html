@@ -1,0 +1,160 @@
+{% extends 'base1.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    {% load static %}
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+ 
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .cart-header, .cart-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 50px;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+        }
+        .cart-header {
+            font-weight: bold;
+            background-color: #f8f8f8;
+            border-radius: 10px 10px 0 0;
+        }
+        .cart-header span:nth-child(4) {
+            display: none; /* Hide the "Remove" column header */
+        }
+        .cart-item {
+            background-color: #fff;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .cart-item-details {
+            font-size: 1.2em;
+        }
+        .cart-item-actions {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .cart-item-actions input {
+            width: 50px;
+            text-align: center;
+            margin-right: 10px;
+            padding: 5px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .cart-item-actions button {
+            background-color: #ff4d4d;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .cart-item-actions button:hover {
+            background-color: #ff1a1a;
+        }
+        .total {
+            text-align: right;
+            font-size: 1.8em;
+            font-weight: bold;
+            padding: 15px;
+            border-top: 1px solid #eee;
+        }
+        .checkout-btn {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        .checkout-btn:hover {
+            background-color: #218838;
+        }
+        .checkout-summary {
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+    <body>
+    <div class="container">
+            <h1>Checkout</h1>
+            <div class="cart">
+                <div class="cart-header">
+                    <span>Product</span>
+                     <span>Quantity</span>
+                      <span>Price</span>
+                      <span></span> 
+                </div>
+        
+        {% for item in order_items %}
+        <div class="cart-item"></div>
+            <div class="cart-item-details">
+               <span>{{ item.product.name }}</span>
+            </div>
+
+            <div class="cart-item-details">
+                <span>{{ item.product.quantity }}</span>
+            </div>
+           
+            <div class="cart-item-actions">
+                 <input type="number" value="{{ item.quantity }}" readonly>
+                <form method="POST" action="{% url 'remove_from_cart' item.product.id %}">
+                    {% csrf_token %}
+                 <button class="delete"><i class="fas fa-trash-alt"></i></button>
+            </form>
+        </div> 
+
+        <div class="cart-item-price">
+            <span>R{{ item.product.price|floatformat:2 }}</span> 
+        </div>
+    </div>    
+        {% endfor %}
+    </div>
+    <div class="total">
+<h2>Total Price: R{{ total_price|floatformat:2 }}</h2>
+</div>
+
+<form method="POST" action="{% url 'payment' %}">
+    {% csrf_token %}
+    <button type="submit">Proceed to Payment Options</button>
+</form>
+{% endblock %}

@@ -1,0 +1,77 @@
+<!-- livestock_edit.html -->
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ form.instance.pk|yesno:"Edit Livestock Profile,Add Livestock Profile" }}</h2>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <!-- Render the entire form with all fields -->
+    {{ form.non_field_errors }}
+    
+    <!-- Livestock Type -->
+    <label for="id_type">Type:</label>
+    <select id="id_type" name="type" onchange="updateBreeds()">
+        <option value="">Select Type</option>
+        <option value="Cattle" {% if form.type.value == 'Cattle' %}selected{% endif %}>Cattle</option>
+        <option value="Sheep" {% if form.type.value == 'Sheep' %}selected{% endif %}>Sheep</option>
+        <option value="Pigs" {% if form.type.value == 'Pigs' %}selected{% endif %}>Pigs</option>
+        <option value="Goats" {% if form.type.value == 'Goats' %}selected{% endif %}>Goats</option>
+        <option value="Horses" {% if form.type.value == 'Horses' %}selected{% endif %}>Horses</option>
+    </select>
+
+    <!-- Livestock Breed -->
+    <label for="id_breed">Breed:</label>
+    <select id="id_breed" name="breed">
+        <option value="">Select Breed</option>
+        <!-- Options will be populated based on type selection -->
+    </select>
+    
+    <!-- Render the rest of the form fields -->
+    {{ form.as_p }}
+    
+    <button type="submit" class="btn">Save</button>
+    <a href="{% url 'crop_list' %}" class="btn">Cancel</a>
+</form>
+
+<script>
+const breeds = {
+    'Cattle': [
+        'Angus', 'Hereford', 'Holstein', 'Jersey'
+    ],
+    'Sheep': [
+        'Merino', 'Suffolk', 'Dorset', 'Hampshire'
+    ],
+    'Pigs': [
+        'Yorkshire', 'Berkshire', 'Landrace', 'Duroc'
+    ],
+    'Goats': [
+        'Nubian', 'Boer', 'Alpine', 'Saanen'
+    ],
+    'Horses': [
+        'Arabian', 'Clydesdale', 'Thoroughbred', 'Quarter Horse'
+    ]
+};
+
+function updateBreeds() {
+    const type = document.getElementById('id_type').value;
+    const breedSelect = document.getElementById('id_breed');
+    
+    // Clear existing options
+    breedSelect.innerHTML = '<option value="">Select Breed</option>';
+    
+    if (type && breeds[type]) {
+        breeds[type].forEach(breed => {
+            const option = document.createElement('option');
+            option.value = breed;
+            option.text = breed;
+            breedSelect.appendChild(option);
+        });
+    }
+}
+
+// Initialize breeds based on the existing type (if editing)
+document.addEventListener('DOMContentLoaded', () => {
+    updateBreeds();
+});
+</script>
+{% endblock %}

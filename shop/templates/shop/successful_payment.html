@@ -1,0 +1,131 @@
+{% extends 'base1.html' %}
+{% block content %}
+<style>
+    /* Styles for the success container */
+    .success-container {
+        background-color: #e8f5e9; /* Light green background */
+        padding: 60px 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: 50px auto;
+        font-family: 'Arial', sans-serif;
+        text-align: center;
+    }
+
+    .success-container h2 {
+        font-size: 2.5rem;
+        color: #388e3c; /* Dark green for headings */
+        margin-bottom: 20px;
+    }
+
+    .success-container .order-details {
+        text-align: left; /* Align details to the left */
+        margin-top: 20px;
+    }
+
+    .success-container p {
+        font-size: 1.2rem;
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+    .success-container strong {
+        color: #1b5e20; /* Darker green for emphasized text */
+        font-weight: bold;
+    }
+
+    .success-container ul {
+        list-style: none; /* Remove bullet points */
+        padding: 0; /* Remove padding */
+    }
+
+    .success-container li {
+        background-color: #c8e6c9; /* Light green list item background */
+        padding: 10px;
+        border-radius: 5px;
+        margin: 5px 0;
+        display: flex; /* Flexbox for alignment */
+        justify-content: space-between; /* Space between product name and price */
+    }
+
+    /* Notification message styling */
+    #confirmation-message {
+        display: none;
+        background-color: #c8e6c9;
+        color: #1b5e20;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    /* Styling for mobile responsiveness */
+    @media (max-width: 768px) {
+        .success-container {
+            padding: 30px 20px;
+        }
+
+        .success-container h2 {
+            font-size: 2rem;
+        }
+
+        .success-container p {
+            font-size: 1rem;
+        }
+    }
+</style>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Success</title>
+</head>
+  <!-- Notification message -->
+  <div id="confirmation-message">Confirmation Sent Successfully!</div>
+<body>
+    <div class="success-container">
+        <h2>Payment Successful!</h2>
+        <div class="order-details">
+            <p><strong>Order ID:</strong> {{ order_id }}</p>
+            <p><strong>Products Bought:</strong></p>
+            <ul>
+                {% for product in products %}
+                <li>{{ product.name }} - R{{ product.price }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    
+        <!-- Form to trigger email sending -->
+        <form method="POST" id="confirmation-form" onsubmit="return sendConfirmation(event);">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Send Confirmation</button>
+        </form>
+        
+      
+    </div>
+
+    <!-- JavaScript to show feedback after form submission -->
+    <script>
+        function sendConfirmation(event) {
+            event.preventDefault();  // Prevent the form from submitting normally
+            
+            // Simulate an email sending process (normally you would submit the form via AJAX here)
+            setTimeout(function() {
+                // Show the confirmation message
+                document.getElementById('confirmation-message').style.display = 'block';
+
+                // Hide the message after 3 seconds
+                setTimeout(function() {
+                    document.getElementById('confirmation-message').style.display = 'none';
+                }, 3000);
+            }, 500);  // Simulate a small delay for email sending
+
+            return false;  // Prevent the default form submission
+        }
+    </script>
+</body>
+</html>
+{% endblock %}

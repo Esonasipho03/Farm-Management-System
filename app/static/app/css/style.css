@@ -1,0 +1,420 @@
+
+    .profile-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;  /* Space between profile items */
+        margin-top: 20px;
+    }
+    
+    /* Individual profile item */
+    .profile-item {
+        display: flex;
+        align-items: center;
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Profile image container */
+    .profile-image img {
+        width: 100px;  /* Adjust image size */
+        height: 100px;
+        object-fit: cover;
+        border-radius: 50%;  /* Circular image like WhatsApp */
+        margin-right: 20px;  /* Space between image and details */
+    }
+    
+    /* Profile details */
+    .profile-details h3 {
+        margin: 0;
+        font-size: 1.5em;
+    }
+    
+    .profile-details p {
+        margin: 5px 0;
+    }
+    
+    .card-container {
+        display: flex;
+        justify-content: center; /* Centers the cards horizontally */
+        align-items: flex-start; /* Aligns the cards at the top */
+        gap: 20px; /* Increased gap for spacing between cards */
+        flex-wrap: wrap; /* Allows cards to wrap to the next line */
+        padding: 20px; /* Padding around the container */
+    }
+    
+    /* Card styling */
+    .card {
+        border: 1px solid #e0e0e0; /* Subtle border */
+        padding: 20px;
+        border-radius: 12px;
+        width: 240px;
+        text-align: center;
+        background-color: #fff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        margin: 10px; /* Add margin to ensure the cards don't stick to the container edges */
+    }
+    
+    /* Hover effect */
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Image styling */
+    .card img {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+    
+    /* Text styling */
+    .card h3 {
+        font-size: 1.2em;
+        font-weight: 600;
+        margin: 10px 0;
+        color: #333;
+    }
+    
+    .card p {
+        font-size: 0.95em;
+        margin: 5px 0;
+        color: #666;
+    }
+    
+    
+.btn {
+    display: inline-block;
+    padding: 10px 25px;
+    background-color: rgb(7, 7, 7);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 10px 20px;
+    border-bottom: 1px solid #000;
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.brand-name {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.navbar-center {
+    display: flex;
+    align-items: center;
+}
+
+.search-form {
+    display: flex;
+    align-items: center; /* Align items vertically in the center */
+}
+
+.search-bar {
+    flex: 1; /* Make the search bar take up available space */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px 0 0 4px; /* Rounded corners for the left side */
+}
+
+.search-button {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 0 4px 4px 0; /* Rounded corners for the right side */
+    background-color: #f8f8f8; /* Adjust background color as needed */
+    cursor: pointer;
+}
+
+.search-button i {
+    font-size: 16px; /* Adjust icon size as needed */
+}
+
+.navbar-right i {
+    font-size: 20px;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+.navbar-bottom {
+    background-color: black;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+.nav-links li {
+    margin: 0 15px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.nav-links a:hover {
+    text-decoration: underline;
+}
+
+/* Breadcrumbs */
+.breadcrumbs {
+    margin: 20px 0;
+    padding: 10px 20px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #ccc;
+}
+
+.breadcrumbs ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.breadcrumbs ul li {
+    margin-right: 10px;
+}
+
+.breadcrumbs ul li a {
+    text-decoration: none;
+    color: #555;
+}
+
+.breadcrumbs ul li::after {
+    content: '>';
+    margin-left: 10px;
+    color: #ccc;
+}
+
+.breadcrumbs ul li:last-child::after {
+    content: '';
+    margin-left: 0;
+
+
+}
+/* General Auction Form and Page Layout */
+.auction-form-container, .auction-detail-container, .auction-list-container {
+    margin: 20px auto;
+    padding: 15px;
+    max-width: 800px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Page and Section Titles */
+.page-title {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-size: 1.5em;
+    margin-top: 30px;
+}
+
+/* Auction Item List */
+.auction-item-list {
+    list-style: none;
+    padding: 0;
+}
+
+.auction-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.auction-item:last-child {
+    border-bottom: none;
+}
+
+.auction-item .item-image {
+    margin-top: 10px;
+}
+
+.img-thumbnail {
+    max-width: 200px;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Buttons */
+.btn {
+    padding: 10px 15px;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary {
+    background-color: rgb(7, 7, 7);
+    color: white;
+}
+
+.btn-success {
+   background-color: rgb(7, 7, 7);
+    color: white;
+}
+
+.btn-warning {
+   
+    background-color: rgb(7, 7, 7);
+    color: white;
+}
+
+/* Auction Link Styling */
+.auction-link {
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+}
+
+.auction-link:hover {
+    text-decoration: underline;
+}
+
+main {
+    padding: 20px;
+}
+
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+   color: #000000;
+}
+         
+p {
+    font-size: 1.2rem;
+    color: #000000;
+}
+         
+.management-tools {
+background-color: #b3b3b3;
+padding: 20px;
+border-radius: 10px;
+box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+}
+         
+.tools-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+grid-gap: 20px;
+         }
+         
+.tool {
+background-color: #8d9ba8;
+padding: 20px;
+border-radius: 8px;
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+text-align: center;
+         }
+         
+.tool-box {
+ margin-top: 10px;
+         }
+         
+.tool h3 {
+color: #000000;
+margin-bottom: 15px;
+         }
+         
+input[type="text"], input[type="number"], input[type="date"] {
+ width: 90%;
+ padding: 8px;
+ margin: 10px 0;
+ border-radius: 5px;
+ border: 1px solid #ccc;
+         }
+         
+button {
+ padding: 10px 20px;
+ border: none;
+ border-radius: 5px;
+ cursor: pointer;
+         }
+         
+.btn {
+background-color: #007bff;
+color: #fff;
+         }
+         
+.btn:hover {
+background-color: #0056b3;
+         }
+         
+.btn-add {
+background-color: #28a745;
+         }
+         
+.btn-add:hover {
+background-color: #218838;
+         }
+         
+ul {
+list-style-type: none;
+padding: 0;
+         }
+         
+li {
+padding: 10px;
+border-bottom: 1px solid #ccc;
+         }
+         
+li button {
+background-color: #dc3545;
+color: white;
+padding: 5px 10px;
+border: none;
+border-radius: 5px;
+         }
+         
+li button:hover {
+background-color: #c82333;
+         }
+#weather-info {
+text-align: center;
+         }
+         
+#weather-icon {
+width: 80px;
+height: 80px;
+margin-top: 10px;
+         }
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
+
+
+
+

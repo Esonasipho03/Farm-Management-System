@@ -1,0 +1,156 @@
+
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipment Maintenance Schedule</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('background-farm-image.jpg'); /* Set your background image */
+            background-size: cover;
+            background-position: center;
+        }
+        .content-wrapper {
+            background-color: rgba(255, 255, 255, 0.9); /* Transparent background for table */
+            padding: 20px;
+            border-radius: 8px;
+        }
+        table {
+            width: 100%;
+        }
+        th, td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .btn-delete {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .btn-edit, .btn-save {
+            background-color: #ffc107;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .btn-add {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    
+
+    <!-- Main Content -->
+    <div class="container mt-5 content-wrapper">
+        <h2 class="text-center">Equipment Maintenance Schedule</h2>
+        <h4 class="text-center mb-4">Maintenance Tasks</h4>
+
+        <form method="POST" id="equipmentForm">
+            {% csrf_token %}
+            <table class="table table-bordered">
+                <thead class="bg-light">
+                    <tr>
+                        <th>Equipment</th>
+                        <th>Maintenance Task</th>
+                        <th>Scheduled Date</th>
+                        
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="taskTable">
+                    {% for equipment in equipment_list %}
+                    <tr>
+                        <td>{{ equipment.name }}</td>
+                        <td>
+                            <select class="form-select" disabled>
+                                <option>{{ equipment.maintenance_task }}</option>
+                                <option>Check-up</option>
+                                <option>Servicing</option>
+                                <option>Replacement</option>
+                            </select>
+                        </td>
+                        <td><input type="date" class="form-control" value="{{ equipment.scheduled_date|date:'Y-m-d' }}" disabled></td>
+
+                        
+                        <td>
+                            <button class="btn btn-edit" onclick="toggleEdit(this)">Edit</button>
+                            <button class="btn btn-delete" onclick="deleteRow(this)">Delete</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <!-- New Row for Adding Equipment -->
+                <tfoot>
+                    <tr id="newEquipmentRow">
+                        <td><input type="text" class="form-control" name="name" placeholder="Equipment Name" required></td>
+                        <td>
+                            <select class="form-select" name="maintenance_task" required>
+                                <option value="Check-up">Check-up</option>
+                                <option value="Servicing">Servicing</option>
+                                <option value="Replacement">Replacement</option>
+                            </select>
+                        </td>
+                        <td><input type="date" class="form-control" name="scheduled_date" required></td>
+                        <td>
+                            <select class="form-select" name="status" required>
+                                <option value="Pending">Pending</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-add">Add</button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </form>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        function deleteRow(button) {
+            const confirmation = confirm("Are you sure you want to delete this equipment?");
+            if (confirmation) {
+                const row = button.closest('tr');
+                row.remove();
+            }
+        }
+
+        function toggleEdit(button) {
+            const row = button.closest('tr');
+            const selects = row.querySelectorAll('select');
+            const inputs = row.querySelectorAll('input');
+
+            if (button.innerText === 'Edit') {
+                selects.forEach(select => select.disabled = false);
+                inputs.forEach(input => input.disabled = false);
+                button.innerText = 'Save';
+                button.classList.remove('btn-edit');
+                button.classList.add('btn-save');
+            } else {
+                selects.forEach(select => select.disabled = true);
+                inputs.forEach(input => input.disabled = true);
+                button.innerText = 'Edit';
+                button.classList.remove('btn-save');
+                button.classList.add('btn-edit');
+            }
+        }
+    </script>
+</body>
+</html>
+{% endblock %}

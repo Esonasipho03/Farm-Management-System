@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .report-section {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+        }
+
+        canvas {
+            margin-top: 20px;
+            max-width: 500px; /* Adjusted size of the graphs */
+            max-height: 400px; /* Adjusted size of the graphs */
+        }
+
+        h2, h3 {
+            font-family: 'Roboto', sans-serif;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            cursor: pointer; /* Indicate clickable titles */
+        }
+
+        .details-list {
+            display: none; /* Hide details by default */
+            margin-top: 20px;
+            text-align: left; /* Align list text to the left */
+        }
+
+        .crop-list {
+            list-style: none; /* Remove default bullet points */
+            padding: 0;
+            margin: 20px auto;
+            max-width: 600px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .crop-list li {
+            background-color: #f1f3f5;
+            margin: 10px 0;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+
+        .crop-list li:hover {
+            transform: scale(1.02);
+        }
+
+        .crop-list li::before {
+            content: '\f058'; /* Font Awesome check-circle icon (use any icon you prefer) */
+            font-family: 'Font Awesome 5 Free'; /* Make sure Font Awesome is loaded */
+            font-weight: 900;
+            margin-right: 15px;
+            color: #28a745;
+        }
+
+        .crop-list li strong {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .crop-list li span {
+            color: #6c757d;
+            margin-left: auto; /* Align the quantity to the right */
+        }
+
+        /* For responsiveness */
+        @media (max-width: 768px) {
+            canvas {
+                max-width: 100%; /* Full width on smaller screens */
+            }
+
+            .crop-list li {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<h2>Crop Inventory Report</h2>
+
+<div class="report-section">
+    <h3 onclick="toggleDetails('varietyDetails')"><i class="fas fa-seedling"></i> By Variety:</h3>
+    <canvas id="cropVarietyChart"></canvas>
+    <div class="details-list" id="varietyDetails">
+        <h4>By Variety (Detailed List):</h4>
+        <ul class="crop-list">
+            {% for item in crops_by_variety %}
+                <li>{{ item.variety }}: <span>{{ item.total_quantity }}</span></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div class="report-section">
+    <h3 onclick="toggleDetails('typeDetails')"><i class="fas fa-leaf"></i> By Type:</h3>
+    <canvas id="cropTypeChart"></canvas>
+    <div class="details-list" id="typeDetails">
+        <h4>By Type (Detailed List):</h4>
+        <ul class="crop-list">
+            {% for item in crops_by_type %}
+                <li>{{ item.crop_type }}: <span>{{ item.total_quantity }}</span></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<script>
+    function toggleDetails(id) {
+        var detailsList = document.getElementById(id);
+        if (detailsList.style.display === "none" || detailsList.style.display === "") {
+            detailsList.style.display = "block"; // Show details
+        } else {
+            detailsList.style.display = "none"; // Hide details
+        }
+    }
+
+    // Crop Variety Chart
+    var ctxVariety = document.getElementById('cropVarietyChart').getContext('2d');
+    var cropVarietyChart = new Chart(ctxVariety, {
+        type: 'bar',
+        data: {
+            labels: [{% for item in crops_by_variety %} "{{ item.variety }}", {% endfor %}], // Populate dynamically
+            datasets: [{
+                label: 'Quantity by Variety',
+                data: [{% for item in crops_by_variety %} {{ item.total_quantity }}, {% endfor %}], // Populate dynamically
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Crop Type Chart
+    var ctxType = document.getElementById('cropTypeChart').getContext('2d');
+    var cropTypeChart = new Chart(ctxType, {
+        type: 'bar',
+        data: {
+            labels: [{% for item in crops_by_type %} "{{ item.crop_type }}", {% endfor %}], // Populate dynamically
+            datasets: [{
+                label: 'Quantity by Type',
+                data: [{% for item in crops_by_type %} {{ item.total_quantity }}, {% endfor %}], // Populate dynamically
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}

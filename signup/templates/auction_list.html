@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+{% endblock %}
+
+{% block content %}
+  <div class="auction-list-container">
+    <h1 class="page-title">My Auctions</h1>
+    <a href="{% url 'create_auction' %}" class="btn btn-primary">Create New Auction</a>
+    <ul class="auction-list">
+      {% for auction in auctions %}
+        <li class="auction-item">
+         <p> <a href="{% url 'auct_detail' pk=auction.pk %}" class="auction-link">{{ auction.title }}</a></p>
+         
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}
+
+

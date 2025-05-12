@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="auction-detail-container">
+    <h1 class="page-title">{{ auction.title }}</h1>
+    <p>{{ auction.description }}</p>
+    <p><strong>Start Time:</strong> {{ auction.start_time }}</p>
+    <p><strong>End Time:</strong> {{ auction.end_time }}</p>
+    <p><strong>Reserve Price:</strong> ${{ auction.reserve_price }}</p>
+    <p> <a href="{% url 'update_auction' pk=auction.pk %}" class="btn btn-warning">Edit</a></p>
+    <h2 class="section-title">Items</h2>
+    <ul class="auction-item-list">
+      {% for item in auction.items.all %}
+        <li class="auction-item">
+          {{ item.name }} - <strong>Starting Price:</strong> ${{ item.starting_price }}
+          {% if item.image %}
+            <div class="item-image">
+              <img src="{{ item.image.url }}" alt="{{ item.name }}" class="img-thumbnail"/>
+            </div>
+          {% endif %}
+          <a href="{% url 'delete_auction_item' auction_pk=auction.pk item_pk=item.pk %}" class="btn btn-danger">Delete Item</a>
+        </li>
+      {% endfor %}
+    </ul>
+    
+    <a href="{% url 'create_auction_item' auction_pk=auction.pk %}" class="btn btn-success">Add New Item</a>
+    <a href="{% url 'delete_auction' pk=auction.pk %}" class="btn btn-danger">Delete Auction</a>
+  </div>
+{% endblock %}
+
+
+

@@ -1,0 +1,282 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up | GreenFarm</title>
+  <style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Poppins', sans-serif;
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .container {
+        max-width: 850px;
+        display: flex;
+        justify-content: space-between;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .welcome-section {
+        background-color: #28a745;
+        color: white;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 45%;
+        text-align: center;
+    }
+
+    .welcome-section h2 {
+        font-size: 36px;
+        margin-bottom: 20px;
+    }
+
+    .welcome-section p {
+        font-size: 16px;
+        margin-bottom: 30px;
+        line-height: 1.5;
+    }
+
+    .welcome-section img {
+        max-width: 100%;
+        border-radius: 8px;
+    }
+
+    .form-section {
+        width: 55%;
+        padding: 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .logo {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .logo h2 {
+        font-size: 32px;
+        color: #28a745;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 8px;
+        display: inline-block;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="password"],
+    .form-group input[type="number"],
+    .form-group select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-sizing: border-box;
+        font-size: 16px;
+        background-color: #fafafa;
+        transition: border-color 0.3s;
+    }
+
+    .form-group input[type="text"]:focus,
+    .form-group input[type="email"]:focus,
+    .form-group input[type="password"]:focus,
+    .form-group input[type="number"]:focus,
+    .form-group select:focus {
+        border-color: #28a745;
+    }
+
+    .form-group button[type="submit"] {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 8px;
+        background-color: #28a745;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .form-group button[type="submit"]:hover {
+        background-color: #218838;
+    }
+
+    .password-requirements {
+        margin-top: 8px;
+        font-size: 14px;
+        color: #d9534f;
+    }
+
+    .form-group a {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+        color: #28a745;
+        font-size: 14px;
+        text-decoration: none;
+    }
+
+    .form-group a:hover {
+        text-decoration: underline;
+    }
+
+    #employeeNumberGroup {
+        display: none;
+    }
+
+    /* Eye icon styling for password toggle */
+    .password-container {
+        position: relative;
+        width: 100%;
+    }
+
+    .password-container input {
+        padding-right: 40px; /* Space for the eye icon */
+    }
+
+    .password-container span {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="welcome-section">
+      <h2>Welcome to GreenFarm</h2>
+      <p>Join our sustainable farming community and start making a positive impact on the environment.</p>
+      <img src="{% static 'images/farmcows.jpg' %}" alt="Welcome">
+    </div>
+    <div class="form-section">
+      <div class="logo">
+        <h2>Sign Up</h2>
+      </div>
+      <form class="form" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" value="{{ form.username.value|default_if_none:'' }}">
+          {{ form.username.errors }}
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" value="{{ form.email.value|default_if_none:'' }}">
+          {{ form.email.errors }}
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <div class="password-container">
+            <input type="password" id="password" name="password" onkeyup="checkPassword()">
+            <span id="toggle-password" onclick="togglePasswordVisibility()">🔒</span>
+          </div>
+          {{ form.password.errors }}
+          <div class="password-requirements" id="password-requirements">
+            Password must be at least 8 characters long, contain uppercase, lowercase letters, numbers, and special characters.
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="userType">Sign Up As:</label>
+          <select id="userType" name="user_type">
+            <option value="" disabled selected>Select type</option>
+            <option value="customer" {% if form.user_type.value == "customer" %}selected{% endif %}>Customer</option>
+            <option value="staff" {% if form.user_type.value == "staff" %}selected{% endif %}>Farm Staff</option>
+          </select>
+          {{ form.user_type.errors }}
+        </div>
+        <div id="employeeNumberGroup" class="form-group">
+          <label for="employeeNumber">Employee Number:</label>
+          <input type="text" id="employeeNumber" name="employee_number" value="{{ form.employee_number.value|default_if_none:'' }}">
+          {% if form.employee_number.errors %}
+            <div style="color: #d9534f;">
+              {{ form.employee_number.errors }}
+            </div>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          <button type="submit">Sign Up</button>
+          <a href="{% url 'login' %}">Already have an account? Log in</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const userTypeSelect = document.getElementById('userType');
+      const employeeNumberGroup = document.getElementById('employeeNumberGroup');
+
+      function toggleEmployeeNumberField() {
+        if (userTypeSelect.value === 'staff') {
+          employeeNumberGroup.style.display = 'block';
+        } else {
+          employeeNumberGroup.style.display = 'none';
+        }
+      }
+
+      userTypeSelect.addEventListener('change', toggleEmployeeNumberField);
+      toggleEmployeeNumberField();
+    });
+
+    function togglePasswordVisibility() {
+      const passwordInput = document.getElementById('password');
+      const toggleIcon = document.getElementById('toggle-password');
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.textContent = '🙈'; // Eye open icon
+      } else {
+        passwordInput.type = 'password';
+        toggleIcon.textContent = '🔒'; // Eye closed icon
+      }
+    }
+
+    function checkPassword() {
+      const passwordInput = document.getElementById('password');
+      const passwordRequirements = document.getElementById('password-requirements');
+
+      const password = passwordInput.value;
+      const isLongEnough = password.length >= 8;
+      const hasUpperCase = /[A-Z]/.test(password);
+      const hasLowerCase = /[a-z]/.test(password);
+      const hasNumber = /[0-9]/.test(password);
+      const hasSpecialChar = /[!@#$%^&*]/.test(password);
+
+      if (isLongEnough && hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar) {
+        passwordRequirements.style.color = 'green';
+        passwordRequirements.textContent = 'Password is strong!';
+      } else {
+        passwordRequirements.style.color = '#d9534f';
+        passwordRequirements.textContent = 'Password must be at least 8 characters long, contain uppercase, lowercase letters, numbers , and special characters.';
+      }
+    }
+  </script>
+</body>
+</html>

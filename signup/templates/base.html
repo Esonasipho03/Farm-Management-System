@@ -1,0 +1,634 @@
+<!-- base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}GreenFarm{% endblock %}</title>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'app/css/style.css' %}">
+    <!-- Add FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<style>
+
+    
+    /* Footer Styles */
+footer {
+    background-color: #2e8b57; /* Green background */
+    color: white; /* White text */
+    text-align: center; /* Centered content */
+    padding: 20px 0; /* Padding for the footer */
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+.content-wrapper {
+    flex: 1; /* Push the footer to the bottom */
+}
+
+footer .footer-links {
+    margin-bottom: 15px;
+}
+
+footer .footer-links a {
+    color: white; /* Keep links white */
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+footer .footer-links a:hover {
+    text-decoration: underline;
+}
+
+footer p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+    /* Modal Background */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto; /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%; /* Could be more or less, depending on screen size */
+        max-width: 400px; /* Max width for better appearance on larger screens */
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Close Button */
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    /* Button Styles */
+    button {
+        padding: 10px 20px;
+        margin: 5px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button#confirm-logout {
+        background-color: red;
+        color: white;
+    }
+
+    button#cancel-logout {
+        background-color: grey;
+        color: white;
+    }
+    .profile-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;  /* Space between profile items */
+        margin-top: 20px;
+    }
+    
+    /* Individual profile item */
+    .profile-item {
+        display: flex;
+        align-items: center;
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Profile image container */
+    .profile-image img {
+        width: 100px;  /* Adjust image size */
+        height: 100px;
+        object-fit: cover;
+        border-radius: 50%;  /* Circular image like WhatsApp */
+        margin-right: 20px;  /* Space between image and details */
+    }
+    
+    /* Profile details */
+    .profile-details h3 {
+        margin: 0;
+        font-size: 1.5em;
+    }
+    
+    .profile-details p {
+        margin: 5px 0;
+    }
+    
+    .card-container {
+        display: flex;
+        justify-content: center; /* Centers the cards horizontally */
+        align-items: flex-start; /* Aligns the cards at the top */
+        gap: 20px; /* Increased gap for spacing between cards */
+        flex-wrap: wrap; /* Allows cards to wrap to the next line */
+        padding: 20px; /* Padding around the container */
+    }
+    
+    /* Card styling */
+    .card {
+        border: 1px solid #e0e0e0; /* Subtle border */
+        padding: 20px;
+        border-radius: 12px;
+        width: 240px;
+        text-align: center;
+        background-color: #fff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        margin: 10px; /* Add margin to ensure the cards don't stick to the container edges */
+    }
+    
+    /* Hover effect */
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Image styling */
+    .card img {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+    
+    /* Text styling */
+    .card h3 {
+        font-size: 1.2em;
+        font-weight: 600;
+        margin: 10px 0;
+        color: #333;
+    }
+    
+    .card p {
+        font-size: 0.95em;
+        margin: 5px 0;
+        color: #666;
+    }
+    
+    
+.btn {
+    display: inline-block;
+    padding: 10px 25px;
+    background-color: rgb(7, 7, 7);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+/* Breadcrumbs */
+.breadcrumbs {
+    margin: 20px 0;
+    padding: 10px 20px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #ccc;
+}
+
+.breadcrumbs ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.breadcrumbs ul li {
+    margin-right: 10px;
+}
+
+.breadcrumbs ul li a {
+    text-decoration: none;
+    color: #555;
+}
+
+.breadcrumbs ul li::after {
+    content: '>';
+    margin-left: 10px;
+    color: #ccc;
+}
+
+.breadcrumbs ul li:last-child::after {
+    content: '';
+    margin-left: 0;
+
+
+}
+/* General Auction Form and Page Layout */
+.auction-form-container, .auction-detail-container, .auction-list-container {
+    margin: 20px auto;
+    padding: 15px;
+    max-width: 800px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Page and Section Titles */
+.page-title {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-size: 1.5em;
+    margin-top: 30px;
+}
+
+/* Auction Item List */
+.auction-item-list {
+    list-style: none;
+    padding: 0;
+}
+
+.auction-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.auction-item:last-child {
+    border-bottom: none;
+}
+
+.auction-item .item-image {
+    margin-top: 10px;
+}
+
+.img-thumbnail {
+    max-width: 200px;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Buttons */
+.btn {
+    padding: 10px 15px;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary {
+    background-color: background-color: rgb(7, 7, 7);
+    color: white;
+}
+
+.btn-success {
+    background-color: background-color: rgb(7, 7, 7);
+    color: white;
+}
+
+.btn-warning {
+   
+    background-color: background-color: rgb(7, 7, 7);
+    color: white;
+}
+
+/* Auction Link Styling */
+.auction-link {
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+}
+
+.auction-link:hover {
+    text-decoration: underline;
+}
+
+main {
+    margin-left: 20px; /* Add space for the sidebar */
+    padding: 40px;
+}
+
+.intro {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+
+
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 4px;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+
+/* Styles for dropdown */
+    .farm-reports-dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .farm-reports-dropdown .dropbtn {
+        background-color: #4CBB17;
+        color: white;
+        padding: 10px 15px;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .farm-reports-content {
+        display: none; /* Hidden by default */
+        position: absolute;
+        background-color: #4CBB17;
+        min-width: 160px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+    .farm-reports-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .farm-reports-content a:hover {
+        background-color: #f1f1f1;
+    }
+
+    .farm-reports-dropdown:hover .farm-reports-content {
+        display: block; /* Show the dropdown on hover */
+    }
+
+  
+    /* Sidebar Styling */
+    .sidebar {
+        width: 220px;
+        background-color: #2E7D32;
+        color: white;
+        position: fixed;
+        height: 100%;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Centering the links vertically */
+        padding: 20px;
+        z-index: 1000;
+    }
+
+    .sidebar-header {
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .sidebar .logo {
+        color: white;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+    }
+    
+    .sidebar .logo i {
+        margin-right: 40px;
+    }
+    
+    
+
+    .sidebar-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        text-align: center; /* Centering text */
+        flex-grow: 1; /* Allowing space for centering */
+    }
+
+    .sidebar-links li {
+        margin-bottom: 15px;
+    }
+
+    .sidebar-links a {
+        text-decoration: none;
+        color: white;
+        font-size: 18px;
+        display: block;
+        padding: 10px;
+        border-radius: 5px;
+        transition: background 0.3s;
+    }
+
+    .sidebar-links a:hover {
+        background-color: #66BB6A;
+    }
+
+    /* Navbar-right for the account icon */
+    .navbar-right {
+        position: absolute;
+        right: 200px; /* Move it to the right */
+        top: 20px; /* Ensure it's at the top */
+    }
+
+    .navbar-right i {
+        font-size: 20px;
+        margin-left: 20px;
+        cursor: pointer;
+    }
+
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background-color: #2E7D32;
+    min-width: 180px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content a {
+    padding: 10px;
+    display: block;
+    color: white;
+    text-decoration: none;
+}
+
+.dropdown-content a:hover {
+    background-color: #66BB6A;
+}
+
+
+/* Body Styling to accommodate sidebar */
+ body {
+        margin-left: 250px;
+        padding: 20px;
+        background-color: #F0F0F0;
+        font-family: Arial, sans-serif;
+    }
+
+
+</style>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <a href="#" class="logo"><i class="fas fa-tractor"></i> GreenFarm</a>
+        </div>
+        <ul class="sidebar-links">
+            <li><a href="{% url 'management_home' %}">Home</a></li>
+            <li><a href="{% url 'crop_list' %}">Crops</a></li>
+            <li><a href="{% url 'live_list' %}">Livestock</a></li>
+            <li><a href="{% url 'auct_list' %}">Auction</a></li>
+            <li><a href="{% url 'schedule' %}">Equipment</a></li>
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="dropbtn">Analytics</a>
+                <div class="dropdown-content">
+                    <a href="{% url 'crop_inventory_report' %}">Crop Reports</a>
+                    <a href="{% url 'livestock_inventory_report' %}">Livestock Reports</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+<!-- Navbar-right for user account logo -->
+<div class="navbar-right">
+    <div class="dropdown">
+        <i class="fa fa-user"></i>
+        <div class="dropdown-content">
+            <a href="{% url 'account' %}"><i class="fas fa-user-cog"></i> Account</a>
+            <a href="#" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </div>
+</div>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <ul>
+            {% block breadcrumbs %}
+                {% for crumb in breadcrumbs %}
+                    <li>
+                        {% if crumb.url %}
+                            <a href="{{ crumb.url }}">{{ crumb.name }}</a>
+                        {% else %}
+                            {{ crumb.name }}
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            {% endblock %}
+        </ul>
+    </div>
+
+    <!-- Content from child templates will be injected here -->
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Logout Modal -->
+    <div id="logout-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Confirm Logout</h2>
+            <p>Are you sure you want to logout?</p>
+            <button id="confirm-logout">Yes, Logout</button>
+            <button id="cancel-logout">Cancel</button>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var logoutLink = document.getElementById('logout-link');
+            var modal = document.getElementById('logout-modal');
+            var closeModal = document.getElementsByClassName('close')[0];
+            var confirmLogout = document.getElementById('confirm-logout');
+            var cancelLogout = document.getElementById('cancel-logout');
+
+            // Open the modal
+            logoutLink.addEventListener('click', function (event) {
+                event.preventDefault();
+                modal.style.display = 'block';
+            });
+
+            // Close the modal
+            closeModal.addEventListener('click', function () {
+                modal.style.display = 'none';
+            });
+
+            // Confirm logout
+            confirmLogout.addEventListener('click', function () {
+                window.location.href = "{% url 'signup' %}";  // Replace with your actual logout URL
+            });
+
+            // Cancel logout
+            cancelLogout.addEventListener('click', function () {
+                modal.style.display = 'none';
+            });
+
+            // Close modal if user clicks outside of it
+            window.addEventListener('click', function (event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+    <footer>
+       
+        <p>&copy; 2024 GreenFarm. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+  <ul>
+    <li><a href="{% url 'homepage' %}">Home</a></li> <!-- Link to homepage -->
+    <li><a href="{% url 'auct_list' %}">Auctions</a></li> <!-- Auction list -->
+    <li>
+      {% if form.instance.pk %} Update Auction {% else %} Create New Auction {% endif %}
+    </li>
+  </ul>
+{% endblock %}
+
+{% block content %}
+  <h1>{% if form.instance.pk %} Update Auction {% else %} Create New Auction {% endif %}</h1>
+  
+  <!-- Ensure enctype is set if uploading files -->
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">
+      {% if form.instance.pk %} Update Auction {% else %} Create Auction {% endif %}
+    </button>
+  </form>
+{% endblock %}

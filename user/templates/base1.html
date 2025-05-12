@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Farm Website{% endblock %}</title>
+
+    {% load static %}
+    <style>
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&display=swap');
+
+        /* Modal Background */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+   
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+            max-width: 400px; /* Max width for better appearance on larger screens */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+   
+        /* Close Button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+   
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+   
+        /* Button Styles */
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+   
+        button#confirm-logout {
+            background-color: red;
+            color: white;
+        }
+   
+        button#cancel-logout {
+            background-color: grey;
+            color: white;
+        }
+:root{
+    --green:#12db00;
+    --dark-color:#000000;
+    --black:#444;
+    --light-color:#666;
+    --border:.1rem solid rgba(0,0,0,.1);
+    --border-hover:.1rem solid var(--black);
+    --box-shadow:0 .5rem 1rem rgba(0,0,0,.1);
+}
+
+*{
+    font-family: 'Poppins', sans-serif;
+    margin:0; padding:0;
+    box-sizing: border-box;
+    outline: none; border:none;
+    text-decoration: none;
+    text-transform: capitalize;
+    transition:all .2s linear;
+    transition:width none;
+}
+
+html{
+    font-size: 62.5%;
+    overflow-x: hidden;
+    scroll-padding-top: 5rem;
+    scroll-behavior: smooth;
+}
+
+html::-webkit-scrollbar{
+    width:1rem;
+}
+
+html::-webkit-scrollbar-track{
+    background:transparent;
+}
+
+html::-webkit-scrollbar-thumb{
+    background:var(--black);
+}
+
+section{
+    padding:5rem 9%;
+}
+
+.heading{
+    text-align: center;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.heading::before{
+    content: '';
+    position: absolute;
+    top:50%; left:0;
+    transform: translateY(-50%);
+    width: 100%;
+    height:.01rem;
+    background: rgba(0,0,0,.1);
+    z-index: -1;
+}
+
+.heading span{
+    font-size: 3rem;
+    padding:.5rem 2rem;
+    color:var(--black);
+    background: #fff;
+    border:var(--border);
+}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 10px 20px;
+    border-bottom: 1px solid #000;
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between the icon and the brand name */
+}
+
+.logo i {
+    font-size: 2rem; /* Adjust the icon size to match the brand name size */
+    color: #333; /* Icon color */
+}
+
+.brand-name {
+    font-size: 2rem; /* Match the font size of the brand name with the icon */
+    font-weight: bold;
+    color: #333; /* Brand name color */
+}
+
+/* Optional: Adjust the sizing for responsiveness */
+@media (max-width: 768px) {
+    .logo i, .brand-name {
+        font-size: 1.5rem; /* Smaller size for mobile */
+    }
+}
+
+
+.navbar-center {
+    display: flex;
+    align-items: center;
+}
+
+
+
+
+
+.navbar-bottom {
+    background-color: #2E7D32;
+    padding: 20px 20px;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+.nav-links li {
+    margin: 0 15px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.nav-links a:hover {
+    text-decoration: underline;
+}
+
+.btn{
+    display: inline-block;
+    margin-top: 1rem;
+    padding:.9rem 3rem;
+    border-radius: .5rem;
+    background: #27ae60;
+    color: #fff;
+    font-size: 1.7rem;
+    cursor: pointer;
+    font-weight: 500;
+
+}
+
+.product .btn:hover {
+    background: #219150;
+}
+
+
+
+.home{
+    background: url(../image/banner-bg.jpg) no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.home .row{
+    display:flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap:2rem;
+}
+
+.home .row .content{
+    flex:1 1 42rem;
+}
+/*slider*/
+.home .row .contents-slider{
+    flex:1 1 42rem;
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.home .row .contents-slider a img{
+    height: 25rem;
+}
+
+.home .row .contents-slider a:hover img{
+    transform: scale(.2);
+}
+
+.home .row .contents-slider .stand{
+    width:100%;
+    margin-top: -2rem;
+}
+
+.home .row .content h3{
+    color:var(--black);
+    font-size: 4.5rem;
+}
+
+.home .row .content p{
+    color:var(--light-color);
+    font-size: 1.4rem;
+    line-height: 2;
+    padding:1rem 0;
+}
+
+.icons-container{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+    gap:2rem;
+}
+
+.icons-container .icons{
+    display: flex;
+    align-items: center;
+    gap:2rem;
+    padding:2rem 0;
+}
+
+.icons-container .icons i{
+    font-size: 3.5rem;
+    color:var(--green);
+}
+
+.icons-container .icons h3{
+    font-size: 2.2rem;
+    color:var(--black);
+    padding-bottom: .5rem;
+}
+
+.icons-container .icons p{
+    font-size: 1.4rem;
+    color:var(--light-color);
+}
+
+
+/*featured*/
+
+.featured .featured-slider .box{
+    margin:1rem 0;
+    position: relative;
+    overflow: hidden;
+    border:var(--border);
+    text-align: center;
+}
+
+.featured .featured-slider .box:hover{
+    border:var(--border-hover);
+}
+
+.featured .featured-slider .box .image{
+    padding:1rem;
+    background: linear-gradient(15deg, #eee 30%, #fff 30.1%);
+}
+
+.featured .featured-slider .box:hover .image{
+    transform: translateY(5rem);
+}
+
+.featured .featured-slider .box .image img{
+    height: 20rem;
+}
+
+.featured .featured-slider .box .icons{
+    border-bottom: var(--border-hover);
+    position: absolute;
+    top:0; left:0; right: 0;
+    background: #fff;
+    z-index: 1;
+    transform: translateY(-105%);
+}
+
+.featured .featured-slider .box:hover .icons{
+    transform: translateY(0%);
+}
+
+.featured .featured-slider .box .icons a{
+    color:var(--black);
+    font-size: 2.2rem;
+    padding:1.3rem 1.5rem;
+}
+
+.featured .featured-slider .box .icons a:hover{
+    background:var(--green);
+    color:#fff;
+}
+
+.featured .featured-slider .box .content{
+    background:#eee;
+    padding:1.5rem;
+}
+
+.featured .featured-slider .box .content h3{
+    font-size: 2rem;
+    color:var(--black);
+}
+
+.featured .featured-slider .box .content .price{
+    font-size: 2.2rem;
+    color:var(--black);
+    padding-top: 1rem;
+}
+
+.featured .featured-slider .box .content .price span{
+    font-size: 1.5rem;
+    color:var(--light-color);
+    text-decoration: line-through;
+}
+/* Featured Section Styling */
+.featured .heading {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+/* Flexbox layout for multiple images in a row */
+.image-group {
+    display: flex; /* Enables flexbox layout */
+    justify-content: space-around; /* Evenly spaces the images */
+    margin-bottom: 20px;
+}
+
+.image-group .image {
+    width: 30%; /* Adjust the width of each image */
+    text-align: center; /* Center images in their container */
+}
+
+.image-group .image img {
+    width: 100%; /* Makes the image fill the container */
+    height: auto; /* Maintains the aspect ratio */
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Content section (for title and button) */
+.content {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.content h1, .content h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.btn {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.btn:hover {
+    background-color: #218838;
+}
+
+
+/* Auction Timer Styles */
+.auction-timer {
+background-color: #000;
+color: #fff;
+padding: 10px 50px;
+margin-top: 10px;
+text-align: center;
+font-size: 30px;
+border-radius: 5px;
+}
+
+
+.deal{
+    background:#f3f3f3;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap:1.5rem;
+}
+
+.deal .content{
+    flex:1 1 42rem;
+}
+
+.deal .image{
+    flex:1 1 42rem;
+}
+
+.deal .image img{
+    width: 100%;
+}
+
+.deal .content h3{
+    color:var(--green);
+    font-size: 2.5rem;
+    padding-bottom: .5rem;
+}
+
+
+.deal .content h1{
+    color:var(--black);
+    font-size: 4rem;
+}
+
+.deal .content p{
+    padding:1rem 0;
+    color:var(--light-color);
+    font-size: 1.4rem;
+    line-height: 2;
+}
+
+/*rewiews*/
+
+.reviews .reviews-slider .box{
+    border:var(--border);
+    padding:2rem;
+    text-align: center;
+    margin:2rem 0;
+}
+
+.reviews .reviews-slider .box:hover{
+    border:var(--border-hover);
+}
+
+.reviews .reviews-slider .box img{
+    height:7rem;
+    width:7rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.reviews .reviews-slider .box h3{
+    color:var(--black);
+    font-size: 2.2rem;
+    padding:.5rem 0;
+}
+
+.reviews .reviews-slider .box p{
+    color:var(--light-color);
+    font-size: 1.4rem;
+    padding:1rem 0;
+    line-height: 2;
+}
+
+.reviews .reviews-slider .box .stars{
+    padding-top: .5rem;
+}
+
+.reviews .reviews-slider .box .stars i{
+    font-size: 1.7rem;
+    color:var(--green);
+}
+
+/*blogs*/
+
+.blogs .blogs-slider .box{
+    margin:2rem 0;
+    border:var(--border);
+}
+
+.blogs .blogs-slider .box:hover{
+    border:var(--border-hover);
+}
+
+.blogs .blogs-slider .box .image{
+    height: 25rem;
+    width: 100%;
+    overflow: hidden;
+}
+
+.blogs .blogs-slider .box .image img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.blogs .blogs-slider .box:hover .image img{
+    transform: scale(1.1);
+}
+
+.blogs .blogs-slider .box .content{
+    padding:1.5rem;
+}
+
+.blogs .blogs-slider .box .content h3{
+    font-size: 2.2rem;
+    color:var(--black);
+}
+
+.blogs .blogs-slider .box .content p{
+    font-size: 1.4rem;
+    color:var(--light-color);
+    padding:1rem 0;
+    line-height: 2;
+}
+
+/*footer*/
+
+.footer .box-container{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+    gap:1.5rem;
+}
+
+.footer .box-container .box h3{
+    font-size: 2.2rem;
+    color:var(--black);
+    padding:1rem 0;
+}
+
+.footer .box-container .box a{
+    display: block;
+    font-size: 1.4rem;
+    color:var(--light-color);
+    padding:1rem 0;
+}
+
+.footer .box-container .box a i{
+    color:var(--green);
+    padding-right: .5rem;
+}
+
+.footer .box-container .box a:hover i{
+    padding-right: 2rem;
+}
+
+.footer .box-container .box .map{
+    width:100%;
+}
+
+.footer .share{
+    padding:1rem 0;
+    text-align: center;
+}
+
+.footer .share a{
+    height: 5rem;
+    width: 5rem;
+    line-height: 5rem;
+    font-size: 2rem;
+    color:#fff;
+    background:var(--green);
+    margin:0 .3rem;
+    border-radius: 50%;
+}
+
+.footer .share a:hover{
+    background:var(--black);
+}
+
+.footer .credit{
+    border-top: var(--border);
+    margin-top: 2rem;
+    padding:0 1rem;
+    padding-top: 2.5rem;
+    font-size: 2rem;
+    color:var(--light-color);
+    text-align: center;
+}
+
+.footer .credit span{
+    color:var(--green);
+}
+
+
+/* media queries  */
+
+@media (max-width:991px){
+
+    html{
+        font-size: 55%;
+    }
+
+    .header .header-1{
+        padding:2rem;
+    }
+
+    section{
+        padding:3rem 2rem;
+    }
+
+}
+
+@media (max-width:768px){
+
+    html{
+        scroll-padding-top: 0;
+    }
+
+    body{
+        padding-bottom: 6rem;
+    }
+
+    .header .header-2{
+        display:none;
+    }
+
+   
+
+    
+    .home .row .content{
+        text-align: center;
+    }
+
+    .home .row .content h3{
+        font-size: 3.5rem;
+    }
+
+}
+
+@media (max-width:450px){
+
+    html{
+        font-size: 50%;
+    }
+
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Space between icons */
+}
+
+.icons a {
+    font-size: 1.5rem; /* Adjust the size of the icons */
+    color: #333; /* Icon color */
+    margin-right: 15px; /* Space between the icons and the user icon */
+    text-decoration: none;
+}
+
+.icons a:hover {
+    color: #27ae60; /* Color change on hover */
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    font-size: 1.5rem; /* Adjust the size of the user icon */
+    color: #333; /* Icon color */
+}
+
+.dropdown i {
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 150px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    right: 0; /* Align dropdown to the right */
+}
+
+.dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Optional: Adjust the spacing between cart and user icons for responsiveness */
+@media (max-width: 500px) {
+    .navbar-right {
+        gap: 10px; /* Adjust spacing between icons on smaller screens */
+    }
+
+    .icons a, .dropdown i {
+        font-size: 1.5rem; /* Smaller icon size for mobile */
+    }
+}
+
+
+/* Breadcrumbs */
+.breadcrumbs {
+    margin: 20px 0;
+    padding: 10px 20px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #ccc;
+}
+
+.breadcrumbs ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.breadcrumbs ul li {
+    margin-right: 10px;
+}
+
+.breadcrumbs ul li a {
+    text-decoration: none;
+    color: #555;
+}
+
+.breadcrumbs ul li::after {
+    content: '>';
+    margin-left: 10px;
+    color: #ccc;
+}
+
+.breadcrumbs ul li:last-child::after {
+    content: '';
+    margin-left: 0;
+
+
+}
+
+/* Main Modal Styling */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 9999; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Background blur effect */
+    backdrop-filter: blur(10px); /* Apply blur */
+}
+
+/* Modal Content Box */
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 80%;
+    max-width: 600px;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Animation for Modal */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Responsive Modal */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 90%;
+        padding: 15px;
+    }
+}
+
+    </style>
+    
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+   
+</head>
+<body>
+    <!-- Header Section -->
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="navbar-left">
+        <a href="#" class="logo"><i class="fas fa-tractor"></i></a>
+        <span class="brand-name">GreenFarm</span>
+    </div>
+    
+    <div class="navbar-right">
+        <div class="icons">
+          
+            <a href="{% url 'cart' %}" class="fas fa-shopping-cart"></a>
+         
+        </div>
+        <div class="dropdown">
+            <i class="fa fa-user"></i>
+            <div class="dropdown-content">
+              
+                <a href="{% url 'account2' %}"><i class="fas fa-user-cog"></i> Account</a>
+                <a href="#" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="navbar-bottom">
+    <ul class="nav-links">
+        <li><a href="{% url 'homepage' %}" >Home</a></li>
+        <li><a href="{% url 'shop' %}">Shop</a></li>
+        <li><a href="{% url 'cart' %}">Cart</a></li>
+        <li><a href="{% url 'auctions_list' %}">Auction</a></li>
+      
+    </ul>
+</div>
+<div class="breadcrumbs">
+    <ul>
+        {% block breadcrumbs %}
+            {% for crumb in breadcrumbs %}
+                <li>
+
+
+
+
+
+                    {% if crumb.url %}
+                        <a href="{{ crumb.url }}">{{ crumb.name }}</a>
+                    {% else %}
+                        {{ crumb.name }}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        {% endblock %}
+    </ul>
+</div>
+
+    <!-- Main Content Section -->
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+       
+          <!-- Logout Modal -->
+          <div id="logout-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Confirm Logout</h2>
+                <p>Are you sure you want to logout?</p>
+                <button id="confirm-logout">Yes, Logout</button>
+                <button id="cancel-logout">Cancel</button>
+            </div>
+        </div>
+  <!-- Privacy Policy Modal -->
+<div id="privacy-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Privacy Policy</h2>
+        <p>This is where the privacy policy information goes. You can describe how data is collected, used, etc.</p>
+    </div>
+</div>
+
+<!-- Our Services Modal -->
+<div id="services-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Our Services</h2>
+        <p>This section describes the services your company provides.</p>
+    </div>
+</div>
+
+    <section class="footer">
+
+    <!-- Footer Section -->
+        <div class="box-container">
+            <div class="box">
+                <h3>our locations</h3>
+                <a href="#"> <i class="fas fa-map-marker-alt"></i> Northern Cape </a>
+                <a href="#"> <i class="fas fa-map-marker-alt"></i> Free State</a>
+                <a href="#"> <i class="fas fa-map-marker-alt"></i> Gauteng </a>
+            </div>
+           
+            <div class="box">
+                <h3>quick links</h3>
+               
+                 <a href="{% url 'shop' %}"> <i class="fas fa-arrow-right"></i> Shop </a>
+                 <a href="{% url 'cart' %}"> <i class="fas fa-arrow-right"></i> My Cart </a>
+                 
+            </div>
+            <div class="box">
+                <h3>extra links</h3>
+                <a href="{% url 'auctions_list' %}"> <i class="fas fa-arrow-right"></i> Auctions </a>
+                <a href="#"> <i class="fas fa-arrow-right"></i> Back to top </a>
+            </div>
+            <div class="box">
+                <h3>contact info</h3>
+                <a href="#"> <i class="fas fa-phone"></i> +27-456-7590 </a>
+                <a href="#"> <i class="fas fa-phone"></i> +27-282-6255 </a>
+                <a href="#"> <i class="fas fa-envelope"></i> greenfarm@gmail.com </a>
+                <img src="{% static 'images/worldmap.png' %}" class="map" alt="">
+            </div>
+        </div>
+
+       
+
+        <div class="share">
+            <a href="https://www.facebook.com/facebook/?_rdc=1&_rdr"class="fab fa-facebook-f"></a>
+            <a href="https://twitter.com/Twitter" class="fab fa-twitter"></a>
+            <a href="https://www.instagram.com/instagram/" class="fab fa-instagram"></a>
+            <a href="https://in.linkedin.com/company/linkedin" class="fab fa-linkedin"></a>
+        </div>
+
+
+    </section>
+   
+    <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+    <script >
+        document.addEventListener('DOMContentLoaded', function () {
+            var logoutLink = document.getElementById('logout-link');
+            var modal = document.getElementById('logout-modal');
+            var closeModal = document.getElementsByClassName('close')[0];
+            var confirmLogout = document.getElementById('confirm-logout');
+            var cancelLogout = document.getElementById('cancel-logout');
+
+            // Open the modal
+            logoutLink.addEventListener('click', function (event) {
+                event.preventDefault();
+                modal.style.display = 'block';
+            });
+
+            // Close the modal
+            closeModal.addEventListener('click', function () {
+                modal.style.display = 'none';
+            });
+
+            // Confirm logout
+            confirmLogout.addEventListener('click', function () {
+                window.location.href = "{% url 'signup' %}";  // Replace with your actual logout URL
+            });
+
+            // Cancel logout
+            cancelLogout.addEventListener('click', function () {
+                modal.style.display = 'none';
+            });
+
+            // Close modal if user clicks outside of it
+            window.addEventListener('click', function (event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Swiper Sliders
+            const contentsSlider = new Swiper('.contents-slider', {
+                loop: true,
+                autoplay: {
+                    delay: 3000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            });
+       
+            const featuredSlider = new Swiper('.featured-slider', {
+                loop: true,
+                spaceBetween: 20,
+                autoplay: {
+                    delay: 4000,
+                    disableOnInteraction: false,
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 1,
+                    },
+                    768: {
+                        slidesPerView: 2,
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                    },
+                },
+            });
+       
+            const blogsSlider = new Swiper('.blogs-slider', {
+                loop: true,
+                spaceBetween: 20,
+                autoplay: {
+                    delay: 3500,
+                    disableOnInteraction: false,
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 1,
+                    },
+                    768: {
+                        slidesPerView: 2,
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                    },
+                },
+            });
+       
+            const reviewsSlider = new Swiper('.reviews-slider', {
+                loop: true,
+                spaceBetween: 20,
+                autoplay: {
+                    delay: 3500,
+                    disableOnInteraction: false,
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 1,
+                    },
+                    768: {
+                        slidesPerView: 2,
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                    },
+                },
+            });
+       
+            // Auction Timer Logic
+            const auctionTimer = document.getElementById('auctionTimer');
+            const auctionEndTime = new Date('2024-10-31T00:00:00').getTime();
+       
+            function updateAuctionTimer() {
+                const now = new Date().getTime();
+                const distance = auctionEndTime - now;
+       
+                if (distance < 0) {
+                    auctionTimer.innerHTML = "Auction Ended!";
+                } else {
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+       
+                    auctionTimer.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                }
+            }
+       
+            setInterval(updateAuctionTimer, 1000);
+        });
+
+        // Get the modal elements
+const privacyModal = document.getElementById('privacy-modal');
+const servicesModal = document.getElementById('services-modal');
+
+// Get the links that open the modals
+const privacyLink = document.getElementById('privacy-link');
+const servicesLink = document.getElementById('services-link');
+
+// Get the <span> elements that close the modals
+const closeButtons = document.querySelectorAll('.close');
+
+// Show Privacy Policy Modal
+privacyLink.addEventListener('click', function(event) {
+    event.preventDefault();
+    privacyModal.style.display = 'block';
+});
+
+// Show Our Services Modal
+servicesLink.addEventListener('click', function(event) {
+    event.preventDefault();
+    servicesModal.style.display = 'block';
+});
+
+// Close the modal when the user clicks on <span> (x)
+closeButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        privacyModal.style.display = 'none';
+        servicesModal.style.display = 'none';
+    });
+});
+
+// Close the modal if the user clicks anywhere outside of the modal content
+window.addEventListener('click', function(event) {
+    if (event.target === privacyModal) {
+        privacyModal.style.display = 'none';
+    }
+    if (event.target === servicesModal) {
+        servicesModal.style.display = 'none';
+    }
+});
+
+       
+    </script>
+</body>
+</html>

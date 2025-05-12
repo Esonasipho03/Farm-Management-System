@@ -1,0 +1,258 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<main>
+    <section class="intro">
+        <h2>Welcome to GreenFarm</h2>
+        <p>Your comprehensive farm management system. Manage your equipment, livestock, and crops all in one place.</p>
+    </section>
+
+    <section class="features">
+        <div class="feature">
+            <img src="{% static 'images/farmeq.jpg' %}" alt="Equipment">
+            <h3>Manage Equipment</h3>
+            <p>Track and maintain all your farm equipment efficiently.</p>
+        </div>
+        <div class="feature">
+            <img src="{% static 'images/farmcows.jpg' %}" alt="Livestock">
+            <h3>Manage Livestock</h3>
+            <p>Monitor the health and productivity of your livestock.</p>
+        </div>
+        <div class="feature">
+            <img src="{% static 'images/farmcrops.jpg' %}" alt="Crops">
+            <h3>Manage Crops</h3>
+            <p>Keep detailed records of your crops from planting to harvest.</p>
+        </div>
+    </section>
+
+    <!-- Management Tools Section -->
+    <section class="management-tools">
+        <h2>Management Tools</h2>
+        <div class="tools-container">
+            <!-- Weather Information -->
+            <div class="tool weather">
+                <h3>Weather Information</h3>
+                <div id="weather-info">
+                    <p id="weather-temp"></p>
+                    <p id="weather-description"></p>
+                    <p id="weather-humidity"></p>
+                    <p id="weather-wind"></p>
+                    <p id="weather-rain"></p>
+                    <img id="weather-icon" alt="Weather Icon" />
+                </div>
+            </div>
+
+            <!-- To-Do List -->
+            <!-- To-Do List -->
+          <div class="tool todo-list">
+               <b><h3>Track Maintenance Tasks</h3></b>
+ 
+               <ul id="todo-items">
+               {% for equipment in upcoming_maintenance %}
+               <li>
+              <input type="checkbox"> {{ equipment.name }} - Maintenance Task: {{ equipment.maintenance_task }} - Next Maintenance: {{ equipment.scheduled_date }}
+              <select class="status-dropdown">
+                  <option value="pending">Pending</option>
+                  <option value="complete">Complete</option>
+              </select>
+                </li>
+               {% empty %}
+              <li>No upcoming maintenance tasks.</li>
+              {% endfor %}
+               </ul>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        /* Feature section styling */
+        .features {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .feature {
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            width: 30%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s; /* Add transition for hover effect */
+        }
+
+        .feature:hover {
+            transform: scale(1.05); /* Slightly enlarge on hover */
+        }
+
+        .feature img {
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        /* Management tools styling */
+        .management-tools {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .tools-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tool {
+            flex: 1;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            min-width: 45%;
+        }
+
+        /* To-Do list form styling */
+        #todo-form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        #todo-input, #todo-date, #todo-form button {
+            width: 100%;
+        }
+
+        #todo-form button {
+            background-color: #4CAF50; /* Green button */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s; /* Transition for hover */
+        }
+
+        #todo-form button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        /* Todo items styling */
+        #todo-items {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        #todo-items li {
+            background-color: #f1f1f1;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .remove-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s; /* Transition for hover */
+        }
+
+        .remove-btn:hover {
+            background-color: darkred;
+        }
+        .status-dropdown {
+          margin-left: 10px;
+          padding: 5px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          background-color: #fff;
+          cursor: pointer;
+      }
+      
+      .status-dropdown:hover {
+          background-color: #f9f9f9; /* Light grey on hover */
+      }
+    </style>
+
+    <script>
+        function fetchWeather() {
+            const apiKey = 'f5f3d3c795ae05e8674cf8abc23d0b21';
+            const city = 'Kimberley';
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const temp = data.main.temp;
+                    const description = data.weather[0].description;
+                    const humidity = data.main.humidity;
+                    const windSpeed = data.wind.speed;
+                    const rain = data.rain ? data.rain['1h'] : 'No rain';
+                    const iconCode = data.weather[0].icon;
+
+                    document.getElementById('weather-temp').textContent = `Temp: ${temp}°C`;
+                    document.getElementById('weather-description').textContent = `Condition: ${description}`;
+                    document.getElementById('weather-humidity').textContent = `Humidity: ${humidity}%`;
+                    document.getElementById('weather-wind').textContent = `Wind Speed: ${windSpeed} m/s`;
+                    document.getElementById('weather-rain').textContent = `Rain: ${rain} mm in the last hour`;
+                    document.getElementById('weather-icon').src = `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
+                })
+                .catch(error => console.error('Error fetching weather:', error));
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchWeather);
+
+        document.getElementById('todo-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const todoInput = document.getElementById('todo-input').value.trim();
+            const todoDate = document.getElementById('todo-date').value;
+            const todoItems = document.getElementById('todo-items');
+
+            if (todoInput && todoDate) {
+                const li = document.createElement('li');
+                li.innerHTML = `<input type="checkbox"> ${todoInput} (Due: ${todoDate}) 
+                                <button class="remove-btn">Remove</button>`;
+
+                // Append new task to the list
+                todoItems.appendChild(li);
+
+                // Clear the input fields
+                document.getElementById('todo-input').value = '';
+                document.getElementById('todo-date').value = '';
+            }
+        });
+
+       
+        // Event delegation to handle status changes from the dropdown
+        document.getElementById('todo-items').addEventListener('change', function(event) {
+  if (event.target.classList.contains('status-dropdown')) {
+      const status = event.target.value;
+      const listItem = event.target.parentElement;
+
+      // Change the appearance based on the status selected
+      if (status === 'complete') {
+          listItem.style.textDecoration = 'line-through'; // Strikethrough for completed tasks
+      } else {
+          listItem.style.textDecoration = 'none'; // Remove strikethrough for pending tasks
+      }
+  }
+});
+    </script>
+</main>
+{% endblock %}

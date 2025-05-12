@@ -1,0 +1,211 @@
+
+{% extends 'base1.html' %}
+{% load static %}
+
+{% block title %}GreenFarm - Auctions{% endblock %}
+
+{% block content %}
+<style>
+    .auction-section {
+        padding: 40px 0;
+        background-color: #f9f9f9;
+        text-align: center;
+    }
+    
+    .auction-item {
+        display: flex;
+        flex-direction: row;
+        max-width: 900px; /* Increased width for more image space */
+        margin: 0 auto 40px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .auction-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    .auction-item img {
+        width: 300px; /* Larger image size */
+        height: auto;
+        margin-right: 20px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+    
+    .auction-details {
+        flex-grow: 1;
+        text-align: left;
+    }
+    
+    .auction-title {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #333;
+    }
+    
+    .auction-description {
+        font-size: 16px;
+        margin-bottom: 15px;
+        color: #666;
+        line-height: 1.5;
+    }
+    
+    .auction-regfee, .auction-bid {
+        font-size: 16px;
+        margin-bottom: 8px;
+        color: #444;
+    }
+    
+    .auction-timer {
+        font-size: 16px;
+        font-weight: bold;
+        color: #ffffff;
+        background-color: #007bff; /* Blue background for the timer */
+        padding: 8px 12px;
+        border-radius: 5px;
+        display: inline-block;
+        margin-bottom: 20px;
+    }
+    
+    .bid-form {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: 280px;
+        margin-top: 10px;
+    }
+    
+    .bid-form label, .bid-form input {
+        margin-bottom: 8px;
+    }
+    
+    .bid-form input[type="text"],
+    .bid-form input[type="number"],
+    .bid-form input[type="tel"] {
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    
+    .bid-form input[type="submit"] {
+        background-color: #32cd32; /* Bright green for the submit button */
+        color: white;
+        padding: 10px;
+        font-size: 14px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    
+    .bid-form input[type="submit"]:hover {
+        background-color: #28a745; /* Slightly darker green on hover */
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .auction-item {
+            flex-direction: column;
+            align-items: center;
+        }
+    
+        .auction-item img {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+    
+        .auction-details {
+            text-align: center;
+        }
+    
+        .bid-form {
+            max-width: 100%;
+        }
+    }
+    
+    
+</style>
+
+<section class="auction-section" id="Auction">
+    <h2>Current Auctions</h2>
+
+    {% for auction in auctions %}
+    <!-- Auction Item Loop -->
+    <div class="auction-item">
+        <img src="{% if auction.image %}{{ auction.image.url }}{% else %}{% static 'images/default.jpg' %}{% endif %}" class="stand" alt="Auction Image">
+        <!-- Assuming auction has an image field -->
+        <div class="auction-details">
+            <h3 class="auction-title">{{ auction.title }}</h3>
+            <p class="auction-description">{{ auction.description }}</p>
+            <p class="auction-regfee">Registration fee: R{{ auction.registration_fee }}</p>
+            <p class="auction-bid">Current Bid: R{{ auction.current_bid }}</p>
+            <p class="auction-timer" id="timer{{ auction.id }}">Time Remaining: {{ auction.end_time|timeuntil }}</p> <!-- Display remaining time -->
+            
+            <!-- Bid Form -->
+            <form class="bid-form" id="bidForm{{ auction.id }}" onsubmit="placeBid(event, '{{ auction.id }}')">
+                <label for="name{{ auction.id }}">Your Name:</label>
+                <input type="text" id="name{{ auction.id }}" name="name" required>
+            
+                <label for="phone{{ auction.id }}">Phone Number:</label>
+                <input type="tel" id="phone{{ auction.id }}" name="phone" pattern="[0-9]{10}" title="Enter a 10-digit phone number" required>
+            
+                <label for="bidAmount{{ auction.id }}">Registration fee:</label>
+                <input type="number" id="bidAmount{{ auction.id }}" name="bidAmount" min="{{ auction.current_bid }}" required>
+            
+                <input type="submit" value="Register">
+            </form>
+            
+        </div>
+    </div>
+    {% endfor %}
+</section>
+
+<script>
+    // Auction Timer Logic
+    // Auction Timer Logic
+    function startAuctionTimers() {
+        {% for auction in auctions %}
+        let timer{{ auction.id }} = {{ auction.end_time|date:"U" }} - Math.floor(Date.now() / 1000); // Seconds remaining
+        const timerElement{{ auction.id }} = document.getElementById("timer{{ auction.id }}");
+
+        // Initialize the timer countdown
+        const interval{{ auction.id }} = setInterval(function() {
+            if (timer{{ auction.id }} <= 0) {
+                clearInterval(interval{{ auction.id }});  // Stop the timer if the auction has ended
+                timerElement{{ auction.id }}.innerHTML = "Auction Ended!";
+            } else {
+                const hours = Math.floor(timer{{ auction.id }} / 3600);
+                const minutes = Math.floor((timer{{ auction.id }} % 3600) / 60);
+                const seconds = timer{{ auction.id }} % 60;
+                timerElement{{ auction.id }}.innerHTML = `Time Remaining: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                timer{{ auction.id }}--;
+            }
+        }, 1000);
+        {% endfor %}
+    }
+
+    // Call the function to start timers when the page loads
+    window.onload = startAuctionTimers;
+
+    function placeBid(event, auctionId) {
+        event.preventDefault();
+        const bidForm = event.target;
+        const name = bidForm.querySelector('input[name="name"]').value;
+        const phone = bidForm.querySelector('input[name="phone"]').value;
+        const bidAmount = bidForm.querySelector('input[name="bidAmount"]').value;
+    
+        // Redirect to the Thank You page with bid details
+        window.location.href = `/thankyou/?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&bidAmount=${encodeURIComponent(bidAmount)}&auctionId=${auctionId}`;
+    }
+    
+</script>
+{% endblock %}

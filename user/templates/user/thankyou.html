@@ -1,0 +1,92 @@
+{% extends 'base1.html' %}
+
+{% block title %}Thank You for Your Bid{% endblock %}
+
+{% block content %}
+<style>
+    /* Styles for the thank-you section */
+    .thankyou-section {
+        background-color: #f5f5f5;
+        padding: 60px 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: 50px auto;
+        font-family: 'Arial', sans-serif;
+        text-align: center;
+    }
+    
+    .thankyou-section h2 {
+        font-size: 2.5rem;
+        color: #2e7d32;
+        margin-bottom: 20px;
+    }
+    
+    .thankyou-section p {
+        font-size: 1.2rem;
+        color: #555;
+        margin-bottom: 15px;
+    }
+    
+    .thankyou-section strong {
+        color: #1b5e20;
+        font-weight: bold;
+    }
+    
+    .thankyou-section #name, 
+    .thankyou-section #auctionId, 
+    .thankyou-section #bidAmount, 
+    .thankyou-section #phone {
+        font-size: 1.3rem;
+        color: #2e7d32;
+    }
+    
+    .thankyou-section p:last-of-type {
+        font-size: 1rem;
+        color: #777;
+        margin-top: 40px;
+        font-style: italic;
+    }
+    
+    /* Add some hover effects to make the text stand out */
+    .thankyou-section p:hover {
+        color: #333;
+        transition: color 0.3s ease;
+    }
+    
+    /* Styling for mobile responsiveness */
+    @media (max-width: 768px) {
+        .thankyou-section {
+            padding: 30px 20px;
+        }
+    
+        .thankyou-section h2 {
+            font-size: 2rem;
+        }
+    
+        .thankyou-section p {
+            font-size: 1rem;
+        }
+    }
+    
+
+</style>
+    <section class="thankyou-section" style="padding: 50px; text-align: center;">
+        <h2>Successfully Registered !</h2>
+        <p>Dear <strong id="name"></strong>,</p>
+        <p>Thank you for placing your bid on Auction ID: <strong id="auctionId"></strong>.</p>
+        <p>Your bid amount: <strong>R<span id="bidAmount"></span></strong></p>
+        <p>We will contact you at <strong id="phone"></strong> for event details</p>
+        <p>Best of luck!</p>
+        <p>Contact us on 072 547 8565 if you wish to be removed from the bidding war!!</p>
+    </section>
+
+    <script>
+        // Parse query parameters and update page content
+        const urlParams = new URLSearchParams(window.location.search);
+        document.getElementById('name').textContent = urlParams.get('name');
+        document.getElementById('phone').textContent = urlParams.get('phone');
+        document.getElementById('bidAmount').textContent = urlParams.get('bidAmount');
+        document.getElementById('auctionId').textContent = urlParams.get('auctionId');
+    </script>
+{% endblock %}

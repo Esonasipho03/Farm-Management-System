@@ -1,0 +1,100 @@
+{% extends 'base1.html' %}
+
+{% block title %} User Account - GreenFarm{% endblock %}
+
+{% block content %}
+
+<style>
+/* CSS code stays the same */
+.account-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 50px auto;
+    background-color: #f9f9f9;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.account-container h2 {
+    text-align: center;
+    color: #2e7d32;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+.account-container form {
+    display: flex;
+    flex-direction: column;
+}
+.account-container form p {
+    margin-bottom: 15px;
+}
+.account-container label {
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #555;
+}
+.account-container input[type="text"],
+.account-container input[type="email"],
+.account-container input[type="password"],
+.account-container select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #fff;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s;
+}
+.account-container input:focus, .account-container select:focus {
+    border-color: #2e7d32;
+    outline: none;
+}
+.account-container .btn {
+    background-color: #2e7d32;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+.account-container .btn:hover {
+    background-color: #256529;
+}
+@media (max-width: 768px) {
+    .account-container {
+        padding: 20px;
+        margin: 30px 15px;
+    }
+}
+</style>
+
+<div class="account-container">
+    <h2>Your Account</h2>
+    <form id="accountForm" method="post" action="{% url 'account2' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+    <p id="success-message" style="display: none; color: #2e7d32; text-align: center; margin-top: 20px;">
+        Your account has been updated successfully!
+    </p>
+</div>
+
+<script>
+    // JavaScript to handle form submission and display success message
+    document.getElementById('accountForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Simulating form submission (replace with actual AJAX or form submission logic)
+        setTimeout(function() {
+            // After submission is done, display success message
+            document.getElementById('success-message').style.display = 'block';
+        }, 500); // Simulating a delay (replace with actual form processing)
+    });
+</script>
+
+{% endblock %}

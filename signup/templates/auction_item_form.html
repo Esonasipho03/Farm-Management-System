@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+  <ul>
+    <li><a href="{% url 'management_home' %}" >Home</a></li>
+    <li><a href="{% url 'auct_list' %}">Auctions</a></li>
+    <li><a href="{% url 'auct_detail' pk=auction.pk %}">{{ auction.title }}</a></li>
+    <li>
+      {% if form.instance.pk %} Edit Auction Item {% else %} Add New Auction Item {% endif %}
+    </li>
+  </ul>
+{% endblock %}
+
+{% block content %}
+  <div class="auction-form-container">
+    <h1 class="page-title">{% if form.instance.pk %} Edit Auction Item {% else %} Add New Auction Item for "{{ auction.title }}" {% endif %}</h1>
+    <form method="post" enctype="multipart/form-data" class="auction-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">{% if form.instance.pk %} Update Item {% else %} Add Item {% endif %}</button>
+    </form>
+  </div>
+{% endblock %}

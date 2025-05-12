@@ -1,0 +1,11 @@
+<!-- crop_edit.html -->
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ form.instance.pk|yesno:"Edit Crop Profile,Add Crop Profile" }}</h2>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">Save</button>
+    <a href="{% url 'crop_list' %}" class="btn">Cancel</a>
+</form>
+{% endblock %}

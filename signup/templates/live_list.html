@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<h2>Farm Livestock Profiles</h2>
+<form method="GET" action="">
+    <input type="text" name="q" placeholder="Search by name" value="{{ request.GET.q }}">
+    <button type="submit">Search</button>
+</form>
+<a href="{% url 'live_add' %}" class="btn btn-primary">Add New Livestock</a>
+
+<div class="profile-list">
+    {% for live in live %}
+    <div class="profile-item">
+        <div class="profile-image">
+            {% if live.image %}
+                <img src="{{ live.image.url }}" alt="{{ live.name }}">
+            {% else %}
+                <img src="{% static 'default-image.jpg' %}" alt="Default Image">
+            {% endif %}
+        </div>
+        <div class="profile-details">
+            <h3>{{ live.name }}</h3>
+            <p>Type: {{ live.type }}</p>
+            <p>Breed: {{ live.breed }}</p>
+            
+            <a href="{% url 'live_detail' live.pk %}" class="btn btn-secondary">View Details</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

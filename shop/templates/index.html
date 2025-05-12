@@ -1,0 +1,280 @@
+{% extends 'base1.html' %}
+{% load static %}
+
+{% block title %}GreenFarm - Home{% endblock %}
+
+{% block content %}
+
+<!-- Home Section -->
+<section class="home" id="home">
+    <div class="row">
+        <div class="content">
+         
+            <h2>Green Farm</h2>
+            <h3>upto 75% off</h3>
+            <p>We offer only the best you can ever get</p>
+            <div class="btn">
+                <div><a href="#"></a></div>
+                <a href="{% url 'shop' %}">shop</a>
+            </div>
+        </div>
+        <div class="swiper contents-slider">
+            <div class="swiper-wrapper">
+                <a href="#" class="swiper-slide"><img src="{% static 'images/fruitsSlider.png' %}" alt=""></a>
+                <a href="#" class="swiper-slide"><img src="{% static 'images/wheelbarrowSlidder.png' %}" alt=""></a>
+                <a href="#" class="swiper-slide"><img src="{% static 'images/featuredanimal.png' %}" alt=""></a>
+                <a href="#" class="swiper-slide"><img src="{% static 'images/spadeslider.png' %}" alt=""></a>
+            </div>
+            <img src="{% static 'images/stand.png' %}" class="stand" alt="">
+        </div>
+    </div>
+</section>
+
+<!-- Icons Section -->
+<section class="icons-container">
+    <div class="icons">
+        <i class="fas fa-shipping-fast"></i>
+        <div class="content">
+            <h3>Collections 24/7</h3>
+            <p>free for Orders over 10 000</p>
+        </div>
+    </div>
+    <div class="icons">
+        <i class="fas fa-lock"></i>
+        <div class="content">
+            <h3>secure payment</h3>
+            <p>100% secure payment</p>
+        </div>
+    </div>
+    <div class="icons">
+        <i class="fas fa-redo-alt"></i>
+        <div class="content">
+            <h3>Healthy Foods</h3>
+            <p>Better life</p>
+        </div>
+    </div>
+    <div class="icons">
+        <i class="fas fa-headset"></i>
+        <div class="content">
+            <h3>24/7 support</h3>
+            <p>call us anytime</p>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Section -->
+<section class="featured" id="featured">
+    <h1 class="heading"> <span>Featured Items</span> </h1>
+    <div class="swiper featured-slider">
+        <!-- Equipment Slide -->
+        <div class="swiper-slide box">
+            <div class="image-group">
+                <div class="image">
+                    <img src="{% static 'images/featuredequipment1.jpg' %}" alt="Equipment 1">
+                </div>
+                <div class="image">
+                    <img src="{% static 'images/featuredequipment2.jpg' %}" alt="Equipment 2">
+                </div>
+                <div class="image">
+                    <img src="{% static 'images/featuredequipment3.jpg' %}" alt="Equipment 3">
+                </div>
+            </div>
+            <div class="content">
+                <h1>Equipment</h1>
+                <a href="{% url 'shop' %}" class="btn">Shop</a>
+            </div>
+        </div>
+
+        <!-- Fruits Slide -->
+        <div class="swiper-slide box">
+            <div class="image-group">
+                <div class="image">
+                    <img src="{% static 'images/featuredfruit1.jpg' %}" alt="Fruit 1">
+                </div>
+                <div class="image">
+                    <img src="{% static 'images/featuredfruit2.jpg' %}" alt="Fruit 2">
+                </div>
+                <div class="image">
+                    <img src="{% static 'images/featuredfruit3.jpg' %}" alt="Fruit 3">
+                </div>
+            </div>
+            <div class="content">
+                <h3>Fruits</h3>
+                <a href="{% url 'shop' %}" class="btn">Shop</a>
+            </div>
+        </div>
+
+        <!-- Animals Slide -->
+        <div class="swiper-slide box">
+            <div class="image-group">
+                <div class="image">
+                    <img src="{% static 'images/featuredanimal1.jpg' %}" alt="Animal 1">
+                </div>
+                <div class="image">
+                    <img src="{% static 'images/featuredanimal2.jpg' %}" alt="Animal 2">
+                </div>
+                <div class="image">
+                    <img src="{% static 'images/featuredanimal3.jpg' %}" alt="Animal 3">
+                </div>
+            </div>
+            <div class="content">
+                <h3>Animals</h3>
+                <a href="{% url 'shop' %}" class="btn">Shop</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Deal Section -->
+<section class="deal">
+    <div class="content">
+        <h3>Great deals</h3>
+        <h1>AUCTIONS IN SESSION</h1>
+        <h1>S.A FARMERS BEST</h1>
+        <p>LET HEALTHY FUN BEGIN.</p>
+        <div class="btn">
+            <div><a href="#"></a></div>
+            <a href="{% url 'auctions_list' %}"> View Auctions</a>
+        </div>
+    </div>
+    <div class="image">
+        <img src="{% static 'images/loader-img.png' %}" alt="">
+        <div id="auctionTimer" class="auction-timer"></div>
+    </div>
+</section>
+
+<!-- Blogs Section -->
+<section class="blogs" id="blogs">
+    <h1 class="heading"> <span>About Our Products</span> </h1>
+    <div class="swiper blogs-slider">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide box">
+                <div class="image">
+                    <img src="{% static 'images/blog-1.jpg' %}" alt="">
+                </div>
+                <div class="content">
+                    <h3>Farm Animals</h3>
+                    <p>Our farm is home to a variety of animals raised with the utmost care and dedication to organic practices.<br>
+                        We ensure that all our animals are raised in a natural environment, free from synthetic additives or hormones.<br>
+                        Our commitment to organic farming guarantees that our animals are healthy and well-cared for,<br>
+                        providing you with the highest quality products. Experience the difference of naturally raised,<br>
+                        organic farm animals with every purchase!</p>
+                </div>
+            </div>
+            <div class="swiper-slide box">
+                <div class="image">
+                    <img src="{% static 'images/blog-2.jpg' %}" alt="">
+                </div>
+                <div class="content">
+                    <h3>Equipment</h3>
+                    <p>Every farm operation relies upon tools to help get the job done—some enterprises are able to remain competitive with<br>
+                        a minimal investment in equipment, while others require substantial investment.<br>
+                        Equipment, along with land, is typically a major cost driver for farm operations.<br>
+                        It is, thus, important to critically evaluate the need for each piece of equipment before buying.</p>
+                </div>
+            </div>
+            <div class="swiper-slide box">
+                <div class="image">
+                    <img src="{% static 'images/blog-3.jpg' %}" alt="">
+                </div>
+                <div class="content">
+                    <h3>Fruits</h3>
+                    <p>Our farm is home to a variety of fresh, organic fruits. We take pride in cultivating our produce without<br>
+                        the use of synthetic pesticides or fertilizers, ensuring that each fruit is natural and healthy. Our commitment to<br>
+                        organic farming practices guarantees that you receive the freshest fruits,<br>
+                        rich in flavor and nutrients, straight from our fields to your table. Enjoy the taste of purity with every bite!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Reviews Section -->
+<section class="reviews" id="reviews">
+    <h1 class="heading"> <span>client's reviews</span> </h1>
+    <div class="swiper reviews-slider">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide box">
+                <img src="{% static 'images/pic-1.jpeg' %}" alt="">
+                <h3>SHOPRITE PYT LTD</h3>
+                <p>At shoprite, we honor such quality items to pass on to our beloved customers.</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+            <div class="swiper-slide box">
+                <img src="{% static 'images/pic-2.jpg' %}" alt="">
+                <h3>Joline Baraski</h3>
+                <p>Bought some equipment from the gees, THE BEST.</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+            <div class="swiper-slide box">
+                <img src="{% static 'images/pic-3.png' %}" alt="">
+                <h3>PICK N PAY</h3>
+                <p>Best supplier, best fruits ever, Ever.</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="{% static 'images/pic-4.jpg' %}" alt="">
+                <h3>Food LOVERS</h3>
+                <p>Greate quality for great quantity and price.</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="{% static 'images/pic-5.png' %}" alt="">
+                <h3>OK</h3>
+                <p>The best for all OK stores to serve our customers with quality.</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="{% static 'images/pic-6.png' %}" alt="">
+                <h3>Zethu</h3>
+                <p>Love evrything, OMG #fruitfull.</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+{% endblock %}

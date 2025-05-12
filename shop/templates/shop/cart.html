@@ -1,0 +1,188 @@
+{% extends 'base1.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart Page</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- Include Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            margin: 40px auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            font-size: 2.5rem;
+        }
+        .cart-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+        .cart-table th, .cart-table td {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            vertical-align: middle;
+        }
+        .cart-table th {
+            background-color: #f4f4f4;
+            font-size: 1.1rem;
+            color: #555;
+        }
+        .cart-table td img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .cart-table td p {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #333;
+        }
+        .cart-table input[type="number"] {
+            width: 60px;
+            padding: 8px;
+            text-align: center;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .cart-table .remove-btn, .cart-table .update-btn {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        .cart-table .remove-btn i {
+            color: #dc3545;
+        }
+        .cart-table .update-btn i {
+            color: #007bff;
+        }
+        .cart-table .remove-btn:hover i {
+            color: #c82333;
+        }
+        .cart-table .update-btn:hover i {
+            color: #0056b3;
+        }
+        .total {
+            text-align: right;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+        .checkout-btn {
+            display: inline-block;
+            background-color: #28a745;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+        .checkout-btn:hover {
+            background-color: #218838;
+        }
+        .checkout-btn:focus {
+            outline: none;
+        }
+        @media (max-width: 768px) {
+            .cart-table th, .cart-table td {
+                padding: 10px;
+            }
+            .cart-table img {
+                width: 60px;
+                height: 60px;
+            }
+            .checkout-btn {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+{% load custom_filters %}
+    <div class="container">
+        <h1>Your Cart</h1>
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product_id, details in cart.items %}
+                <tr>
+                    <td>
+                        <img src="{{ details.image_url }}" alt="{{ details.name }}">
+                        <p>{{ details.name }}</p>
+                    </td>
+                    <td>R{{ details.price|floatformat:2 }}</td>
+                    <td>
+                        <form method="post" action="{% url 'update_cart' product_id %}">
+                            {% csrf_token %}
+                            <input type="number" name="quantity" value="{{ details.quantity }}" min="1">
+                            <button type="submit" class="update-btn" title="Update Quantity">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </form>
+                    </td>
+                    <td>R{{ details.price|multiply:details.quantity|floatformat:2 }}</td>
+                    <td>
+                        <form method="post" action="{% url 'remove_from_cart' product_id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="remove-btn" title="Remove from Cart">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="total">
+            Total: R{{ total_price|floatformat:2 }}
+        </div>
+        <!-- Payment Button -->
+<div style="text-align:center; margin-top: 20px;">
+    <button id="proceed-to-payment" style="background: #007bff; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+        Proceed to Payment
+    </button>
+</div>
+
+<script>
+    document.getElementById('proceed-to-payment').addEventListener('click', function() {
+        window.location.href = "/payment/";
+    });
+</script>
+
+    </div>
+</body>
+</html>
+{% endblock %}
